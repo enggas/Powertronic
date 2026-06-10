@@ -20,6 +20,9 @@ namespace Powertronic.Models
         [Required(ErrorMessage="Es Requerido el Numero de Telefono")]
         public required string Telefono { get; set; }
 
+        [Required(ErrorMessage="Es Requerido el Gmail del Cliente")]
+        public required string Gmail { get; set; }
+
 
         [Required(ErrorMessage="Es Requerida la Direccion del Cliente")]
         public required string Direccion { get; set; }

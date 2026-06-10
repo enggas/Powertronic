@@ -21,7 +21,7 @@ namespace Powertronic.Models
 
         [ForeignKey(nameof(Proveedor))]
         public int ProveedorId { get; set; }
-        public Proveedor? Proveedor { get; set; }
+        public Proveedores? Proveedor { get; set; }
 
 
         [Required(ErrorMessage ="El Total de la Adquisicion es Requerida")]
