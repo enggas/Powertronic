@@ -3,11 +3,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Powertronic.Data
 {
-    public class ApplicationDbContext : IdentityDbContext
+    public class ApplicationDbContext : DbContext
     {
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
-            : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
+
+
+
         }
     }
 }
