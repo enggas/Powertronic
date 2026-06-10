@@ -11,10 +11,12 @@ namespace Powertronic.Models
         public int Id { get; set; }
 
         [ForeignKey(nameof(Adquisicion))]
-        public int AdquisicionId { get; set; }
+        public int AdquisicionId { get; set; } 
+        public Adquisicion? Adquisicion { get; set; } = null!;
 
         [ForeignKey(nameof(Producto))]
         public int ProductoId { get; set; }
+        public Producto? Producto { get; set; } = null!;
 
 
         [Required(ErrorMessage="El Precio de Adquisicion es Requerido")]

@@ -21,6 +21,7 @@ namespace Powertronic.Models
 
         [ForeignKey(nameof(Cargo))]
         public int CargoId { get; set; }
+        public required Cargo Cargo { get; set; }
 
         [Required(ErrorMessage="El Telefono del Empleado es Requerido")]
         public required string Telefono { get; set; }
@@ -37,6 +38,8 @@ namespace Powertronic.Models
         public required DateTime FechaRegistro { get; set; }
 
 
+        public ICollection<Despacho> despachos { get; set; } = new List<Despacho>();
+        public ICollection<Orden_Reparacion> orden_Reparaciones { get; set; } = new List<Orden_Reparacion>();
 
     }
 }

@@ -26,5 +26,6 @@ namespace Powertronic.Models
         public required bool Estado { get; set; }
 
 
+        public ICollection<Adquisicion> adquisiciones { get; set; } = new List<Adquisicion>();
     }
 }

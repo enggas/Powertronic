@@ -33,9 +33,6 @@ namespace Powertronic.Models
         public DateTime FechaRegistro { get; set; }
 
 
-        public required List<Venta_Prod> Ventas_Prod { get; set; }
-        public required List<Despacho> Despachos { get; set; }
-        public required List<Orden_Reparacion> Orden_Reparaciones { get; set; }
-
+ 
     }
 }

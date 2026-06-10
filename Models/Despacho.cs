@@ -15,12 +15,15 @@ namespace Powertronic.Models
 
         [ForeignKey(nameof(Clientes))]
         public int ClientesId { get; set; }
+        public required Clientes? Clientes { get; set; }
 
         [ForeignKey(nameof(Empleado))]
         public int EmpleadoId { get; set; }
+        public required Empleado? Empleado { get; set; }
 
         [ForeignKey(nameof(Venta_Prod))]
         public int Venta_ProdId { get; set; }
+        public required Venta_Prod? Venta_Prod { get; set; }
 
         [Required(ErrorMessage="El Total de la Factura es Requerida")]
         public decimal TotalFactura { get; set; }
@@ -29,8 +32,9 @@ namespace Powertronic.Models
         [Required(ErrorMessage="La Fecha de la Factura es requerida")]
         public DateTime FechaFactura { get; set; }
         
-         public required Clientes? Clientes { get; set; }
-         public required Empleado? Empleado { get; set; }
+         
+
+         
 
     }
 }

@@ -16,7 +16,7 @@ namespace Powertronic.Models
         [Required(ErrorMessage="La Fecha de Creacion de la Venta es Requerida")]
         public DateTime FechaCreacion { get; set; }
 
-        public required List<Despacho>? Despacho { get; set; }
+        public ICollection<Det_Venta> det_Ventas { get; set; } = new List<Det_Venta>();
 
 
 

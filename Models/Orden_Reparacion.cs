@@ -12,9 +12,11 @@ namespace Powertronic.Models
 
         [ForeignKey(nameof(Despacho))]
         public int DespachoId { get; set; }
+        public required Despacho? Despacho { get; set; }
 
         [ForeignKey(nameof(Empleado))]
         public int EmpleadoId { get; set; }
+        public required Empleado? Empleado { get; set; }
 
         [Required(ErrorMessage="Los Detalles de la Reparacion son requeridos")]
         public required string DetallesReparacion { get; set; }
@@ -31,8 +33,7 @@ namespace Powertronic.Models
         public required bool EstadoEntrega { get; set; }
 
 
-        public required Empleado? Empleado { get; set; }
+      
 
-        public required Despacho? Despacho { get; set; }
     }
 }

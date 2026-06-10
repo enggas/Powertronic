@@ -42,7 +42,7 @@ namespace Powertronic.Models
         public DateTime FechaCreacion { get; set; }
 
 
-
+        public ICollection<Det_Venta> Detalle_Ventas { get; set; } = new List<Det_Venta>();
 
     }
 }

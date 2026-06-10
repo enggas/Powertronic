@@ -15,7 +15,8 @@ namespace Powertronic.Models
 
         public required bool Estado { get; set; }
 
-        public required List<Producto> Productos { get; set; }
+        
+        public ICollection<Producto> productos { get; set; } = new List<Producto>();
 
 
     }

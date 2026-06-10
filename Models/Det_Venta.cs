@@ -12,9 +12,11 @@ namespace Powertronic.Models
 
         [ForeignKey(nameof(Venta_Prod))]
         public int Venta_ProdId { get; set; }
+        public required Venta_Prod? Venta_Prod { get; set; } = null!;
 
         [ForeignKey(nameof(Producto))]
-        public int ProductoId { get; set; }
+        public int ProductoId { get; set; } 
+        public required Producto? Producto { get; set; } = null!;
 
         [Required(ErrorMessage="La Cantidad de Producto es Requerida")]
         public int Cantidad { get; set; }
@@ -22,8 +24,8 @@ namespace Powertronic.Models
         [Required(ErrorMessage="El Total de la Venta es Requerido")]
         public decimal TotalVenta { get; set; }
 
-        public required Venta_Prod? Venta_Prod { get; set; }
-        public required Producto? Producto { get; set; }
+       
+  
 
     }
 }
