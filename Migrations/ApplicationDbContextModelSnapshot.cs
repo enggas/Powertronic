@@ -8,7 +8,7 @@ using Powertronic.Data;
 
 #nullable disable
 
-namespace Powertronic.Data.Migrations
+namespace Powertronic.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -26,25 +26,31 @@ namespace Powertronic.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("EmpleadoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Empleado_Id");
 
                     b.Property<DateTime>("FechaAdquisicion")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Fecha");
 
                     b.Property<string>("NumeroDocumento")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Num_Documento");
 
                     b.Property<int>("ProveedorId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Proveedor_Id");
 
                     b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Total");
 
                     b.HasKey("Id");
 
@@ -59,23 +65,28 @@ namespace Powertronic.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Descripcion")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Descripcion");
 
                     b.Property<bool>("Estado")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("Estado");
 
                     b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Fecha_Creacion");
 
                     b.Property<string>("NombreCargo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("NombreCargo");
 
                     b.HasKey("Id");
 
@@ -86,16 +97,19 @@ namespace Powertronic.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<bool>("Estado")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("Estado");
 
                     b.Property<string>("NombreCategoria")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Nombre");
 
                     b.HasKey("Id");
 
@@ -106,35 +120,48 @@ namespace Powertronic.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ApellidoCliente")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Apellidos");
+
+                    b.Property<string>("Cedula")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Cedula");
 
                     b.Property<string>("Direccion")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Direccion");
 
                     b.Property<bool>("Estado")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("Estado");
 
                     b.Property<DateTime>("FechaRegistro")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Fecha_Creacion");
 
                     b.Property<string>("Gmail")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Gmail");
 
                     b.Property<string>("NombreCliente")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Nombres");
 
                     b.Property<string>("Telefono")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Telefono");
 
                     b.HasKey("Id");
 
@@ -145,28 +172,39 @@ namespace Powertronic.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("ClientesId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Cliente_Id");
 
                     b.Property<int>("EmpleadoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Empleado_Id");
 
                     b.Property<DateTime>("FechaFactura")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Fecha");
 
                     b.Property<string>("NumeroFactura")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Num_Factura");
+
+                    b.Property<int>("TipoPagoId")
+                        .HasColumnType("int")
+                        .HasColumnName("TipoPago_Id");
 
                     b.Property<decimal>("TotalFactura")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Total");
 
                     b.Property<int>("Venta_ProdId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Venta_Prod_Id");
 
                     b.HasKey("Id");
 
@@ -183,21 +221,26 @@ namespace Powertronic.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("Cantidad")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Cantidad");
 
                     b.Property<int>("ProductoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Producto_Id");
 
                     b.Property<decimal>("TotalVenta")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Total");
 
                     b.Property<int>("Venta_ProdId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Venta_Prod_Id");
 
                     b.HasKey("Id");
 
@@ -212,24 +255,30 @@ namespace Powertronic.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<int>("AdquisicionId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Adquisicion_Id");
 
                     b.Property<decimal>("PrecioAdquisicion")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("PrecioAdquisicion");
 
                     b.Property<int>("ProductoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Producto_Id");
 
                     b.Property<int>("Stock")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Stock");
 
                     b.Property<decimal>("Total")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Total");
 
                     b.HasKey("Id");
 
@@ -244,42 +293,57 @@ namespace Powertronic.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Apellido")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Apellidos");
 
                     b.Property<int>("CargoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Cargo_Id");
+
+                    b.Property<string>("Cedula")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Cedula");
 
                     b.Property<string>("Codigo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CodigoEmpleado");
 
                     b.Property<string>("Direccion")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Direccion");
 
                     b.Property<bool>("Estado")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("Estado");
 
                     b.Property<DateTime>("FechaRegistro")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Fecha_Creacion");
 
                     b.Property<string>("Gmail")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Gmail");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Nombres");
 
                     b.Property<string>("Telefono")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Telefono");
 
                     b.HasKey("Id");
 
@@ -292,31 +356,39 @@ namespace Powertronic.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<decimal>("CostoReparacion")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Costo");
 
                     b.Property<int>("DespachoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Factura_Id");
 
                     b.Property<string>("DetallesReparacion")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Det_Reparacion");
 
                     b.Property<int>("EmpleadoId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Empleado_Id");
 
                     b.Property<bool>("EstadoEntrega")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("EstadoEntrega");
 
                     b.Property<DateTime>("FechaEntrega")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Fecha_Entrega");
 
                     b.Property<DateTime>("FechaOrden")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Fecha_Orden");
 
                     b.HasKey("Id");
 
@@ -327,50 +399,104 @@ namespace Powertronic.Data.Migrations
                     b.ToTable("Orden_Reparacion");
                 });
 
+            modelBuilder.Entity("Powertronic.Models.Pago_Tarjeta", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("CodigoAutorizacion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CodigoAutorizacion");
+
+                    b.Property<int>("DespachoId")
+                        .HasColumnType("int")
+                        .HasColumnName("Despacho_Id");
+
+                    b.Property<DateTime>("FechaPago")
+                        .HasColumnType("datetime2")
+                        .HasColumnName("FechaPago");
+
+                    b.Property<string>("MarcaTarjeta")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("MarcaTarjeta");
+
+                    b.Property<decimal>("Monto")
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Monto");
+
+                    b.Property<string>("Ultimos4")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Ultimos4");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DespachoId");
+
+                    b.ToTable("Pago_Tarjeta");
+                });
+
             modelBuilder.Entity("Powertronic.Models.Producto", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("CategoriaProducto")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CategoriaProducto_Id");
 
                     b.Property<int?>("CategoriaProductoId")
                         .HasColumnType("int");
 
                     b.Property<string>("Codigo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CodigoProducto");
 
                     b.Property<bool>("Estado")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("Estado");
 
                     b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Fecha_Creacion");
 
                     b.Property<string>("ImagenUrl")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Imagen");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("NombreProducto");
 
                     b.Property<decimal>("PrecioCompra")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("PrecioCompra");
 
                     b.Property<decimal>("PrecioVenta")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("PrecioVenta");
 
                     b.Property<int>("ProveedoresId")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Proveedores_Id");
 
                     b.Property<int>("StockDisponible")
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Stock");
 
                     b.HasKey("Id");
 
@@ -383,47 +509,79 @@ namespace Powertronic.Data.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Codigo")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("CodigoProveedor");
 
                     b.Property<string>("Direccion")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Direccion");
 
                     b.Property<bool>("Estado")
-                        .HasColumnType("bit");
+                        .HasColumnType("bit")
+                        .HasColumnName("Estado");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("NombreProveedor");
 
                     b.Property<string>("Telefono")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Telefono");
 
                     b.HasKey("Id");
 
                     b.ToTable("Proveedores");
                 });
 
+            modelBuilder.Entity("Powertronic.Models.TipoPago", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("Estado")
+                        .HasColumnType("bit")
+                        .HasColumnName("Estado");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Nombre");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tipos_Pago");
+                });
+
             modelBuilder.Entity("Powertronic.Models.Venta_Prod", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("FechaCreacion")
-                        .HasColumnType("datetime2");
+                        .HasColumnType("datetime2")
+                        .HasColumnName("Fecha");
 
                     b.Property<decimal>("TotalVenta")
-                        .HasColumnType("decimal(18,2)");
+                        .HasColumnType("decimal(18,2)")
+                        .HasColumnName("Total");
 
                     b.HasKey("Id");
 
@@ -528,7 +686,7 @@ namespace Powertronic.Data.Migrations
             modelBuilder.Entity("Powertronic.Models.Orden_Reparacion", b =>
                 {
                     b.HasOne("Powertronic.Models.Despacho", "Despacho")
-                        .WithMany()
+                        .WithMany("orden_Reparacions")
                         .HasForeignKey("DespachoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -542,6 +700,17 @@ namespace Powertronic.Data.Migrations
                     b.Navigation("Despacho");
 
                     b.Navigation("Empleado");
+                });
+
+            modelBuilder.Entity("Powertronic.Models.Pago_Tarjeta", b =>
+                {
+                    b.HasOne("Powertronic.Models.Despacho", "Despacho")
+                        .WithMany()
+                        .HasForeignKey("DespachoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Despacho");
                 });
 
             modelBuilder.Entity("Powertronic.Models.Producto", b =>
@@ -559,6 +728,11 @@ namespace Powertronic.Data.Migrations
             modelBuilder.Entity("Powertronic.Models.CategoriaProducto", b =>
                 {
                     b.Navigation("productos");
+                });
+
+            modelBuilder.Entity("Powertronic.Models.Despacho", b =>
+                {
+                    b.Navigation("orden_Reparacions");
                 });
 
             modelBuilder.Entity("Powertronic.Models.Empleado", b =>

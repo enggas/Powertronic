@@ -4,7 +4,7 @@ using Powertronic.Models;
 
 namespace Powertronic.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
         {
@@ -25,6 +25,8 @@ namespace Powertronic.Data
         public DbSet<Producto> Producto { get; set; }
         public DbSet<Proveedores> Proveedores { get; set; }
         public DbSet<Venta_Prod> Venta_Prod { get; set; }
+        public DbSet<TipoPago> TiposPago { get; set; }
+        public DbSet<Pago_Tarjeta> PagosTarjeta { get; set; } 
 
 
     }

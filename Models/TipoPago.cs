@@ -3,23 +3,19 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Powertronic.Models
 {
-    [Table("CategoriaProducto")]
-    public class CategoriaProducto
+    [Table("Tipos_Pago")]
+    public class TipoPago
     {
         [Column("Id")]
         [Key]
         public int Id { get; set; }
 
         [Column("Nombre")]
-        [Required(ErrorMessage="Es Requerida El Nombre de la Categoria")]
-        public required string NombreCategoria { get; set; }
+        [Required(ErrorMessage="El Nombre del Tipo de Pago es Requerido")]
+        public required string Nombre { get; set; }
 
         [Column("Estado")]
         public required bool Estado { get; set; }
-
-        
-        public ICollection<Producto> productos { get; set; } = new List<Producto>();
-
 
     }
 }
