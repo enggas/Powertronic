@@ -14,7 +14,7 @@ namespace Powertronic.Models
 
         [Column("Cedula")]
         [Required(ErrorMessage="Es Requerida la Cedula del Cliente")]
-        public string Cedula { get; set; }
+        public required string Cedula { get; set; }
 
         [Column("Nombres")]
         [Required(ErrorMessage="Es Requerido el Nombre del Cliente")]
@@ -31,6 +31,10 @@ namespace Powertronic.Models
         [Column("Gmail")]
         [Required(ErrorMessage="Es Requerido el Gmail del Cliente")]
         public required string Gmail { get; set; }
+
+        [Column("Contraseña")]
+        [Required(ErrorMessage="Es Requerida la Contraseña del Cliente")]
+        public required string Contraseña { get; set; }
 
         [Column("Direccion")]
         [Required(ErrorMessage="Es Requerida la Direccion del Cliente")]
