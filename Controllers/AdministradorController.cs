@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Powertronic.Data;
 using Powertronic.Models;
+using Powertronic.Models.ViewModels;
 
 namespace Powertronic.Controllers
 {
@@ -20,12 +21,78 @@ namespace Powertronic.Controllers
         }
 
 
-
-        // GET: Empleadoes
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Empleado.Include(e => e.Cargo);
-            return View(await applicationDbContext.ToListAsync());
+            var empleados = await _context.Empleado
+                .Include(e => e.Cargo)
+                .Take(5)
+                .ToListAsync();
+
+            decimal totalVentas =
+                await _context.Venta_Prod.SumAsync(v =>
+                    (decimal?)v.TotalVenta) ?? 0;
+
+            decimal totalReparaciones =
+                await _context.Orden_Reparacion.SumAsync(r =>
+                    (decimal?)r.CostoReparacion) ?? 0;
+
+            decimal totalAdquisiciones =
+                await _context.Adquisicion.SumAsync(a =>
+                    (decimal?)a.Total) ?? 0;
+
+            int ventasTarjeta =
+                await _context.PagosTarjeta.CountAsync();
+
+            int ventasTotales =
+                await _context.Venta_Prod.CountAsync();
+
+            int ventasEfectivo =
+                ventasTotales - ventasTarjeta;
+
+            DashboardViewModel vm =
+            new DashboardViewModel
+            {
+                Empleados = empleados,
+
+                TotalGanancias =
+                    totalVentas +
+                    totalReparaciones,
+
+                TotalPerdidas =
+                    totalAdquisiciones,
+
+                VentasEfectivo =
+                    ventasEfectivo,
+
+                VentasTarjeta =
+                    ventasTarjeta
+            };
+
+            return View(vm);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ListProducto()
+        {
+            var productos = await _context.Producto
+                .ToListAsync();
+
+            return View(productos);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ListProducto(string buscar)
+        {
+            IQueryable<Producto> productos = _context.Producto;
+
+            if (!string.IsNullOrWhiteSpace(buscar))
+            {
+                productos = productos.Where(p =>
+                    p.Nombre.Contains(buscar) ||
+                    p.Codigo.Contains(buscar));
+            }
+
+            return View(await productos.ToListAsync());
         }
 
         // GET: Empleadoes/Details/5

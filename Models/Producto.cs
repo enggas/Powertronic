@@ -39,11 +39,15 @@ namespace Powertronic.Models
 
         [Column("CategoriaProducto_Id")]
         [ForeignKey(nameof(CategoriaProducto))]
-        public required int CategoriaProducto { get; set; }
+        public required int CategoriaProductoId { get; set; }
+        public required CategoriaProducto? CategoriaProducto { get; set; }
+
+
 
         [Column("Proveedores_Id")]
         [ForeignKey(nameof(Proveedores))]
         public int ProveedoresId { get; set; }
+        public required Proveedores? Proveedores { get; set; }
         
         [Column("Estado")]
         public required bool Estado { get; set; }

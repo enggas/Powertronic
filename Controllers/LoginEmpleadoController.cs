@@ -62,13 +62,13 @@ namespace Powertronic.Controllers
             switch (empleado.CargoId)
             {
                 case 1: // Administrador de Usuarios
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "Administrador");
 
-                case 2: // Encargado de Compras
-                    return RedirectToAction("Index", "Home");
+                case 2: // Vendedor
+                    return RedirectToAction("Index", "Vendedor");
 
-                case 3: // Encargado de Ventas
-                    return RedirectToAction("Index", "Home");
+                case 3: // Tecnico
+                    return RedirectToAction("Index", "Tecnico");
 
                 default:
                     // Rol no reconocido

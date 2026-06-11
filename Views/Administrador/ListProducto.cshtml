@@ -1,0 +1,208 @@
+﻿@model IEnumerable<Powertronic.Models.Producto>
+
+@{
+    ViewData["Title"] = "ListProducto";
+}
+
+<style>
+
+    .catalog-search {
+        margin-bottom: 25px;
+    }
+
+        .catalog-search form {
+            display: flex;
+            gap: 10px;
+        }
+
+    .search-box {
+        flex: 1;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+    }
+
+    .search-btn {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+    }
+
+        .search-btn:hover {
+            background: var(--accent-color);
+        }
+
+    .product-card {
+        display: flex;
+        background: white;
+        margin-bottom: 20px;
+        border: 1px solid #dcdcdc;
+        box-shadow: 0 2px 5px rgba(0,0,0,.08);
+    }
+
+    .product-image {
+        width: 220px;
+        border-right: 1px solid #ddd;
+    }
+
+        .product-image img {
+            width: 100%;
+            height: 220px;
+            object-fit: contain;
+            padding: 10px;
+        }
+
+    .product-info {
+        flex: 1;
+    }
+
+    .product-header {
+        background: var(--secondary-color);
+        color: white;
+        font-size: 28px;
+        font-weight: bold;
+        padding: 10px 20px;
+    }
+
+    .product-details {
+        display: flex;
+        justify-content: space-between;
+        padding: 20px;
+    }
+
+    .left-column,
+    .right-column {
+        width: 45%;
+    }
+
+        .left-column p,
+        .right-column p {
+            margin-bottom: 10px;
+        }
+
+    .product-description {
+        border-top: 1px solid #ddd;
+        padding: 15px 20px;
+        background: #fafafa;
+    }
+
+ 
+    
+     .product-card
+    {
+        flex-direction: column;
+    }
+
+    .product-image {
+        width: 100%;
+        border-right: none;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .product-details {
+        flex-direction: column;
+    }
+
+    .left-column,
+    .right-column {
+        width: 100%;
+    }
+ 
+
+</style>
+
+<div class="catalog-search">
+
+    <form asp-action="ListProducto" asp-controller="Administrador" method="post">
+
+        <input type="text"
+               name="buscar"
+               value="@Context.Request.Query["buscar"]"
+               placeholder="Buscar producto..."
+               class="search-box" />
+        <button type="submit" class="search-btn">
+            Buscar
+        </button>
+
+    </form>
+
+</div>
+
+@foreach (var producto in Model)
+{
+    <div class="product-card">
+
+        <div class="product-image">
+
+            <img src="@producto.ImagenUrl"
+                 alt="@producto.Nombre" />
+
+        </div>
+
+        <div class="product-info">
+
+            <div class="product-header">
+                @producto.Nombre
+            </div>
+
+            <div class="product-details">
+
+                <div class="left-column">
+
+                    <p>
+                        <strong>Código:</strong>
+                        @producto.Codigo
+                    </p>
+
+                    <p>
+                        <strong>Stock:</strong>
+                        @producto.StockDisponible
+                    </p>
+
+                    <p>
+                        <strong>Estado:</strong>
+
+                        @(producto.Estado
+                                            ? "Disponible"
+                                            : "No Disponible")
+                </p>
+
+                </div>
+
+                <div class="right-column">
+
+                    <p>
+                        <strong>Precio Venta:</strong>
+                        C$ @producto.PrecioVenta
+                    </p>
+
+                    <p>
+                        <strong>Precio Compra:</strong>
+                        C$ @producto.PrecioCompra
+                    </p>
+
+                    <p>
+                        <strong>Fecha:</strong>
+                        @producto.FechaCreacion.ToShortDateString()
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="product-description">
+
+                <strong>Descripción:</strong>
+
+                Producto perteneciente al catálogo
+                de Powertronic.
+
+            </div>
+
+        </div>
+
+    </div>
+}
+
