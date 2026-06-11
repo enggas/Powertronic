@@ -28,9 +28,9 @@ namespace Powertronic.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(string Gmail, string Pssword, string? returnUrl = null)
+        public async Task<IActionResult> LoginCliente(string Gmail, string Contraseña, string? returnUrl = null)
         {
-            if (string.IsNullOrWhiteSpace(Gmail) || string.IsNullOrWhiteSpace(Pssword))
+            if (string.IsNullOrWhiteSpace(Gmail) || string.IsNullOrWhiteSpace(Contraseña))
             {
                 ModelState.AddModelError("", "El Correo Electronico y la Contraseña son obligatorios.");
                 return View();
@@ -38,7 +38,7 @@ namespace Powertronic.Controllers
 
             var user = await _context.Clientes.FirstOrDefaultAsync(c => c.Gmail == Gmail);
 
-            if (user == null || user.Contraseña != Pssword)
+            if (user == null || user.Contraseña != Contraseña)
             {
                 ModelState.AddModelError("", "Credenciales inválidas.");
                 return View();
