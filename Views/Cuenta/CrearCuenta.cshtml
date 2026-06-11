@@ -2,7 +2,6 @@
 
 @{
     ViewBag.Title = "Crear Cuenta";
-    Layout = null;
 }
 
 <!DOCTYPE html>
@@ -10,93 +9,135 @@
 <head>
     <meta charset="utf-8" />
     <title>Crear Cuenta - Phone Store</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #08515E;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+<style> 
 
-        .login-container {
-            background-color: #FFFFFF;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-        }
+            .crear-cuenta-wrapper{
+                display:flex;
+                justify-content:center;
+                align-items:center;
+                min-height:80vh;
+                padding:30px;
+            }
 
-        h2 {
-            color: #08515E;
-            margin-bottom: 30px;
-        }
+            .crear-cuenta-card{
+                width:1100px;
+                min-height:700px;
+                background:white;
+                display:flex;
+                border-radius:20px;
+                overflow:hidden;
+                box-shadow:0 10px 30px rgba(0,0,0,.15);
+            }
 
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
+            /* Lado izquierdo */
 
-        label {
-            display: block;
-            margin-bottom: 6px;
-            color: #2E2E2E;
-        }
+            .form-section{
+                flex:1;
+                padding:50px;
+                background:white;
+            }
 
-        input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-        }
+            .form-section h2{
+                text-align:center;
+                margin-bottom:40px;
+                color:var(--secondary-color);
+                font-size:3rem;
+                font-weight:bold;
+            }
 
-        .btn-submit {
-            background-color: #08515E;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 6px;
-            width: 100%;
-            margin-top: 20px;
-            cursor: pointer;
-            font-size: 16px;
-        }
+            .form-group{
+                margin-bottom:15px;
+            }
 
-        .btn-submit:hover {
-            background-color: #063b45;
-        }
+            .form-control{
+                height:50px;
+                border:none;
+                background:#f3f4f6;
+                border-radius:10px;
+            }
 
-        .text-danger {
-            color: red;
-            font-size: 14px;
-        }
+            .form-control:focus{
+                border:2px solid var(--accent-color);
+                box-shadow:none;
+            }
 
-        .back-login {
-            text-align: center;
-            margin-top: 20px;
-        }
+            /* Botón */
 
-        .back-login a {
-            color: #5CE1E6;
-            text-decoration: none;
-            font-size: 14px;
-        }
+            .btn-submit{
+                width:100%;
+                height:55px;
+                border:none;
+                border-radius:10px;
+                background:var(--primary-color);
+                color:white;
+                font-size:18px;
+                font-weight:600;
+                margin-top:20px;
+                transition:.3s;
+            }
 
-        .back-login a:hover {
-            text-decoration: underline;
-        }
-    </style>
+            .btn-submit:hover{
+                background:var(--accent-color);
+            }
+
+            /* Lado derecho */
+
+            .info-section{
+                flex:1;
+                background:linear-gradient(
+                    135deg,
+                    var(--primary-color),
+                    var(--accent-color)
+                );
+
+                display:flex;
+                justify-content:center;
+                align-items:center;
+                color:white;
+                text-align:center;
+                padding:40px;
+            }
+
+            .info-content h1{
+                font-size:3rem;
+                margin-bottom:20px;
+            }
+
+            .info-content p{
+                font-size:1.2rem;
+                line-height:1.8;
+            }
+
+            .back-login{
+                text-align:center;
+                margin-top:25px;
+            }
+
+            .back-login a{
+                color:var(--primary-color);
+                text-decoration:none;
+                font-weight:bold;
+            }
+
+            .back-login a:hover{
+                color:var(--accent-color);
+            }
+
+</style>
+
 </head>
 <body>
-    <div class="login-container">
-        <h2>Crear Cuenta</h2>
 
-        @using (Html.BeginForm("CrearCuenta", "Cuenta", FormMethod.Post))
+
+    <div class="crear-cuenta-wrapper">
+
+    <div class="crear-cuenta-card">
+
+        <div class="form-section">
+
+            <h2>Crear Cuenta</h2>
+
+            @using (Html.BeginForm("CrearCuenta", "Cuenta", FormMethod.Post))
         {
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -156,7 +197,36 @@
         <div class="back-login">
             <a href="@Url.Action("Login", "Login")">¿Ya tienes cuenta? Inicia sesión</a>
         </div>
+
+        </div>
+
+        <div class="info-section">
+
+            <div class="info-content">
+
+                <h1>Powertronic</h1>
+
+                <p>
+                    Crea tu cuenta y accede a nuestro catálogo de
+                    computadoras, componentes, periféricos y las mejores
+                    ofertas tecnológicas.
+                </p>
+
+                <p>
+                    Compra de forma rápida, segura y administra tus pedidos
+                    desde un solo lugar.
+                </p>
+
+            </div>
+
+        </div>
+
     </div>
+
+</div>
+
+
+   
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>

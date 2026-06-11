@@ -2,7 +2,6 @@
 
 @{
     ViewBag.Title = "Iniciar Sesión";
-    Layout = null;
 }
 
 <!DOCTYPE html>
@@ -11,114 +10,217 @@
     <meta charset="utf-8" />
     <title>Login - Phone Store</title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #08515E;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+     
+        .iniciar-sesion-wrapper{
+                display:flex;
+                justify-content:center;
+                align-items:center;
+                min-height:80vh;
+                padding:30px;
+            }
 
-        .login-container {
-            background-color: #FFFFFF;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-        }
+            .iniciar-sesion-card{
+                width:1100px;
+                min-height:700px;
+                background:white;
+                display:flex;
+                border-radius:20px;
+                overflow:hidden;
+                box-shadow:0 10px 30px rgba(0,0,0,.15);
+            }
 
-        .login-container h2 {
-            color: #08515E;
-            margin-bottom: 30px;
-        }
+            /* Lado izquierdo */
 
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
+            .form-section{
+                flex:1;
+                padding:50px;
+                background:white;
+            }
 
-        label {
-            display: block;
-            margin-bottom: 6px;
-            color: #2E2E2E;
-        }
+            .form-section h2{
+                text-align:center;
+                margin-bottom:40px;
+                color:var(--secondary-color);
+                font-size:3rem;
+                font-weight:bold;
+            }
 
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-        }
+            .form-group{
+                margin-bottom:15px;
+            }
 
-        .btn-login {
-            background-color: #08515E;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 6px;
-            width: 100%;
-            margin-top: 20px;
-            cursor: pointer;
-            font-size: 16px;
-        }
+            .form-control{
+                height:50px;
+                border:none;
+                background:#f3f4f6;
+                border-radius:10px;
+            }
 
-        .btn-login:hover {
-            background-color: #063b45;
-        }
+            .form-control:focus{
+                border:2px solid var(--accent-color);
+                box-shadow:none;
+            }
 
-        .forgot-password {
-            display: block;
-            margin-top: 25px;
-            color: #5CE1E6;
-            text-decoration: none;
-            font-size: 14px;
-        }
+            /* Botón */
 
-        .forgot-password:hover {
-            text-decoration: underline;
-        }
+            .btn-submit{
+                width:100%;
+                height:55px;
+                border:none;
+                border-radius:10px;
+                background:var(--primary-color);
+                color:white;
+                font-size:18px;
+                font-weight:600;
+                margin-top:20px;
+                transition:.3s;
+            }
 
-        .error-message {
-            color: red;
-            margin-top: 10px;
-        }
+            .btn-submit:hover{
+                background:var(--accent-color);
+            }
 
-        .text-danger {
-            color: red;
-            font-size: 14px;
-        }
+            /* Lado derecho */
 
-    .btn-volver {
-        display: inline-block;
-        margin-top: 20px;
-        padding: 10px 20px;
-        color: #08515E;
-        background-color: transparent;
-        border: 2px solid #08515E;
-        border-radius: 6px;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        font-weight: bold;
-    }
+            .info-section{
+                flex:1;
+                background:linear-gradient(
+                    135deg,
+                    var(--primary-color),
+                    var(--accent-color)
+                );
 
-    .btn-volver:hover {
-        background-color: #08515E;
-        color: white;
-    }
+                display:flex;
+                justify-content:center;
+                align-items:center;
+                color:white;
+                text-align:center;
+                padding:40px;
+            }
 
+            .info-content h1{
+                font-size:3rem;
+                margin-bottom:20px;
+            }
+
+            .info-content p{
+                font-size:1.2rem;
+                line-height:1.8;
+            }
+
+            .back-login{
+                text-align:center;
+                margin-top:25px;
+            }
+
+            .back-login a{
+                color:var(--primary-color);
+                text-decoration:none;
+                font-weight:bold;
+            }
+
+            .back-login a:hover{
+                color:var(--accent-color);
+            }
+
+            .btn-login{
+    width:100%;
+    height:55px;
+    border:none;
+    border-radius:10px;
+    background:var(--primary-color);
+    color:white;
+    font-size:18px;
+    font-weight:600;
+    margin-top:20px;
+    transition:.3s;
+}
+
+.btn-login:hover{
+    background:var(--accent-color);
+}
+
+.links-container{
+    margin-top:25px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.forgot-password{
+    text-decoration:none;
+    color:var(--primary-color);
+    font-weight:500;
+    text-align:center;
+}
+
+.forgot-password:hover{
+    color:var(--accent-color);
+}
+
+.error-message{
+    margin-top:20px;
+    padding:12px;
+    border-radius:10px;
+    background:#ffe5e5;
+    color:#c62828;
+    text-align:center;
+}
+
+.btn-volver{
+    display:block;
+    text-align:center;
+    margin-top:20px;
+    padding:12px;
+    border-radius:10px;
+    text-decoration:none;
+    background:var(--secondary-color);
+    color:white;
+    transition:.3s;
+}
+
+.btn-volver:hover{
+    background:var(--primary-color);
+    color:white;
+}
+
+.text-danger{
+    color:#dc3545;
+    font-size:14px;
+}
+
+.info-content{
+    max-width:450px;
+}
+
+.info-content h1{
+    font-size:3rem;
+    font-weight:bold;
+    margin-bottom:25px;
+}
+
+.info-content p{
+    font-size:1.1rem;
+    line-height:1.8;
+}
+
+        
+ 
+     
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <h2>Iniciar Sesión</h2>
 
-        @using (Html.BeginForm("LoginEmpleado", "LoginEmpleado", FormMethod.Post))
+    <div class="iniciar-sesion-wrapper">
+
+    <div class="iniciar-sesion-card">
+
+        <!-- PANEL IZQUIERDO -->
+        <div class="form-section">
+
+            <h2>Iniciar Sesión</h2>
+
+            @using (Html.BeginForm("LoginEmpleado", "LoginEmpleado", FormMethod.Post))
         {
             @Html.AntiForgeryToken()
             @Html.ValidationSummary(true, "", new { @class = "text-danger" })
@@ -148,7 +250,33 @@
     ←       Volver al menú principal
         </a>
 
+
+
+
+        </div>
+
+        <!-- PANEL DERECHO -->
+        <div class="info-section">
+
+            <div class="info-content">
+
+                <h1>Powertronic Staff</h1>
+
+                <p>
+                    Inicia sesión para acceder a los recursos internos de la empresa.
+                </p>
+
+                <p>
+                    Gestiona productos, clientes, pedidos y procesos operativos de manera eficiente desde cualquier lugar y en cualquier momento.
+                </p>
+
+            </div>
+
+        </div>
+
     </div>
+
+</div>
 
     <!-- Scripts de validación obligatorios -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>

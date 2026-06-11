@@ -2,7 +2,6 @@
 
 @{
     ViewBag.Title = "Iniciar Sesión";
-    Layout = null; // Para que no cargue el layout principal
 }
 
 <!DOCTYPE html>
@@ -10,149 +9,297 @@
 <head>
     <meta charset="utf-8" />
     <title>Login - Powertronic</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            background-color: #08515E;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
+<style>
 
-        .login-container {
-            background-color: #FFFFFF;
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            width: 100%;
-            max-width: 400px;
-            text-align: center;
-        }
+            .iniciar-sesion-wrapper{
+                display:flex;
+                justify-content:center;
+                align-items:center;
+                min-height:80vh;
+                padding:30px;
+            }
 
-        .login-container h2 {
-            color: #08515E;
-            margin-bottom: 30px;
-        }
+            .iniciar-sesion-card{
+                width:1100px;
+                min-height:700px;
+                background:white;
+                display:flex;
+                border-radius:20px;
+                overflow:hidden;
+                box-shadow:0 10px 30px rgba(0,0,0,.15);
+            }
 
-        .form-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
+            /* Lado izquierdo */
 
-        label {
-            display: block;
-            margin-bottom: 6px;
-            color: #2E2E2E;
-        }
+            .form-section{
+                flex:1;
+                padding:50px;
+                background:white;
+            }
 
-        input[type="text"],
-        input[type="password"] {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-        }
+            .form-section h2{
+                text-align:center;
+                margin-bottom:40px;
+                color:var(--secondary-color);
+                font-size:3rem;
+                font-weight:bold;
+            }
 
-        .btn-login {
-            background-color: #08515E;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 6px;
-            width: 100%;
-            margin-top: 20px;
-            cursor: pointer;
-            font-size: 16px;
-        }
+            .form-group{
+                margin-bottom:15px;
+            }
 
-        .btn-login:hover {
-            background-color: #063b45;
-        }
+            .form-control{
+                height:50px;
+                border:none;
+                background:#f3f4f6;
+                border-radius:10px;
+            }
 
-        .forgot-password {
-            display: block;
-            margin-top: 25px;
-            color: #5CE1E6;
-            text-decoration: none;
-            font-size: 14px;
-        }
+            .form-control:focus{
+                border:2px solid var(--accent-color);
+                box-shadow:none;
+            }
 
-        .forgot-password:hover {
-            text-decoration: underline;
-        }
+            /* Botón */
 
-        .error-message {
-            color: red;
-            margin-top: 10px;
-        }
+            .btn-submit{
+                width:100%;
+                height:55px;
+                border:none;
+                border-radius:10px;
+                background:var(--primary-color);
+                color:white;
+                font-size:18px;
+                font-weight:600;
+                margin-top:20px;
+                transition:.3s;
+            }
 
-        .text-danger {
-            color: red;
-            font-size: 14px;
-        }
+            .btn-submit:hover{
+                background:var(--accent-color);
+            }
 
-    .btn-volver {
-        display: inline-block;
-        margin-top: 20px;
-        padding: 10px 20px;
-        color: #08515E;
-        background-color: transparent;
-        border: 2px solid #08515E;
-        border-radius: 6px;
-        text-decoration: none;
-        transition: all 0.3s ease;
-        font-weight: bold;
-    }
+            /* Lado derecho */
 
-    .btn-volver:hover {
-        background-color: #08515E;
-        color: white;
-    }
+            .info-section{
+                flex:1;
+                background:linear-gradient(
+                    135deg,
+                    var(--primary-color),
+                    var(--accent-color)
+                );
 
+                display:flex;
+                justify-content:center;
+                align-items:center;
+                color:white;
+                text-align:center;
+                padding:40px;
+            }
+
+            .info-content h1{
+                font-size:3rem;
+                margin-bottom:20px;
+            }
+
+            .info-content p{
+                font-size:1.2rem;
+                line-height:1.8;
+            }
+
+            .back-login{
+                text-align:center;
+                margin-top:25px;
+            }
+
+            .back-login a{
+                color:var(--primary-color);
+                text-decoration:none;
+                font-weight:bold;
+            }
+
+            .back-login a:hover{
+                color:var(--accent-color);
+            }
+
+            .btn-login{
+    width:100%;
+    height:55px;
+    border:none;
+    border-radius:10px;
+    background:var(--primary-color);
+    color:white;
+    font-size:18px;
+    font-weight:600;
+    margin-top:20px;
+    transition:.3s;
+}
+
+.btn-login:hover{
+    background:var(--accent-color);
+}
+
+.links-container{
+    margin-top:25px;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+}
+
+.forgot-password{
+    text-decoration:none;
+    color:var(--primary-color);
+    font-weight:500;
+    text-align:center;
+}
+
+.forgot-password:hover{
+    color:var(--accent-color);
+}
+
+.error-message{
+    margin-top:20px;
+    padding:12px;
+    border-radius:10px;
+    background:#ffe5e5;
+    color:#c62828;
+    text-align:center;
+}
+
+.btn-volver{
+    display:block;
+    text-align:center;
+    margin-top:20px;
+    padding:12px;
+    border-radius:10px;
+    text-decoration:none;
+    background:var(--secondary-color);
+    color:white;
+    transition:.3s;
+}
+
+.btn-volver:hover{
+    background:var(--primary-color);
+    color:white;
+}
+
+.text-danger{
+    color:#dc3545;
+    font-size:14px;
+}
+
+.info-content{
+    max-width:450px;
+}
+
+.info-content h1{
+    font-size:3rem;
+    font-weight:bold;
+    margin-bottom:25px;
+}
+
+.info-content p{
+    font-size:1.1rem;
+    line-height:1.8;
+}
+
+        
+ 
 </style>
 </head>
 <body>
-    <div class="login-container">
-        <h2>Iniciar Sesión</h2>
 
-        @using (Html.BeginForm("LoginCliente", "LoginCliente", FormMethod.Post))
-        {
-            @Html.AntiForgeryToken()
-            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="iniciar-sesion-wrapper">
 
-            <div class="form-group">
-                @Html.LabelFor(m => m.Gmail, "Correo")
-                @Html.TextBoxFor(m => m.Gmail, new { @class = "form-control", placeholder = "Ingrese su correo electrónico" })
-                @Html.ValidationMessageFor(m => m.Gmail, "", new { @class = "text-danger" })
+    <div class="iniciar-sesion-card">
+
+        <!-- PANEL IZQUIERDO -->
+        <div class="form-section">
+
+            <h2>Iniciar Sesión</h2>
+
+            @using (Html.BeginForm("LoginCliente", "LoginCliente", FormMethod.Post))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Gmail, "Correo Electrónico")
+                    @Html.TextBoxFor(m => m.Gmail,
+                        new {
+                            @class = "form-control",
+                            placeholder = "Ingrese su correo electrónico"
+                        })
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Contraseña, "Contraseña")
+                    @Html.PasswordFor(m => m.Contraseña,
+                        new {
+                            @class = "form-control",
+                            placeholder = "Ingrese su contraseña"
+                        })
+                </div>
+
+                <button type="submit" class="btn-login">
+                    Iniciar Sesión
+                </button>
+            }
+
+            <div class="links-container">
+
+                <a href="#" class="forgot-password">
+                    ¿Has olvidado tu contraseña?
+                </a>
+
+                <a href="@Url.Action("CrearCuenta", "Cuenta")"
+                   class="forgot-password">
+                    ¿No tienes cuenta? Crear una nueva
+                </a>
+
             </div>
 
-            <div class="form-group">
-                @Html.LabelFor(m => m.Contraseña, "Contraseña")
-                @Html.PasswordFor(m => m.Contraseña, new { @class = "form-control", placeholder = "Ingrese su contraseña" })
-                @Html.ValidationMessageFor(m => m.Contraseña, "", new { @class = "text-danger" })
+            @if (!string.IsNullOrEmpty(ViewBag.Error as string))
+            {
+                <div class="error-message">
+                    @ViewBag.Error
+                </div>
+            }
+
+            <a href="@Url.Action("Index", "Home")"
+               class="btn-volver">
+                ← Volver al menú principal
+            </a>
+
+        </div>
+
+        <!-- PANEL DERECHO -->
+        <div class="info-section">
+
+            <div class="info-content">
+
+                <h1>Powertronic</h1>
+
+                <p>
+                    Bienvenido de vuelta.
+                    Explora nuestra amplia gama de productos
+                    tecnológicos y encuentra lo que necesitas para
+                    potenciar tu experiencia digital.
+                </p>
+
+                <p>
+                    Compra de forma rápida, segura y administra
+                    tus pedidos desde un solo lugar.
+                </p>
+
             </div>
 
-            <button type="submit" class="btn-login">Iniciar Sesión</button>
-        }
+        </div>
 
-        <a href="#" class="forgot-password">¿Has olvidado tu contraseña?</a>
-        <a href="@Url.Action("CrearCuenta", "Cuenta")" class="forgot-password">¿No tienes cuenta? Crear una nueva</a>
-
-
-
-        @if (!string.IsNullOrEmpty(ViewBag.Error as string))
-        {
-            <div class="error-message">@ViewBag.Error</div>
-        }
-
-        <a href="@Url.Action("Index", "Home")" class="btn-volver">
-    ←       Volver al menú principal
-        </a>
     </div>
 
+</div>
     <!-- Scripts de validación obligatorios -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.5/jquery.validate.min.js"></script>
