@@ -41,7 +41,7 @@ namespace Powertronic.Models
         public required bool EstadoEntrega { get; set; }
 
 
-      
+
 
     }
 }
