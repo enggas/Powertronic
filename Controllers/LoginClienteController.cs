@@ -58,7 +58,7 @@ namespace Powertronic.Controllers
             if (!string.IsNullOrEmpty(returnUrl) && Url.IsLocalUrl(returnUrl))
                 return Redirect(returnUrl);
 
-            return RedirectToAction("Cliente_Index", "Cliente");
+            return RedirectToAction("Index", "Home");
 
         }
 
