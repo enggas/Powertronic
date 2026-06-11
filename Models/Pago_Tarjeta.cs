@@ -24,9 +24,9 @@ namespace Powertronic.Models
         [Required(ErrorMessage = "El Numero de Tarjeta es Requerido")]
         public required string Ultimos4 { get; set; }
 
-        [Column("CodigoAutorizacion")]
-        [Required(ErrorMessage="El Codigo de Autorizacion es Necesario")]
-        public required string CodigoAutorizacion { get; set; }
+        [Column("CVV")]
+        [Required(ErrorMessage="El CVV es Necesario")]
+        public required string CVV { get; set; }
 
         [Column("Monto")]
         [Required(ErrorMessage="El Monto es Requerido")]
