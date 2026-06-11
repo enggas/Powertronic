@@ -7,6 +7,25 @@ a.navbar-brand {
   word-break: break-all;
 }
 
+.navbar-logo {
+    height: 42px;
+    width: auto;
+    margin-right: 8px;
+}
+
+
+.brand-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.brand-subtitle {
+    display: block;
+    color: var(--accent-color);
+    line-height: 1;
+}
+
 a {
   color: #0077cc;
 }
