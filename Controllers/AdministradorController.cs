@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -218,6 +220,279 @@ namespace Powertronic.Controllers
             }
 
             return View(await clientes.ToListAsync());
+        }
+
+        private bool ValidarTelefono(string telefono)
+        {
+            return Regex.IsMatch(telefono, @"^[2578][0-9]{7}$");
+        }
+
+        private bool ValidarCedula(string cedula)
+        {
+            return Regex.IsMatch(cedula, @"^\d{3}-\d{6}-\d{4}[A-Z]$");
+        }
+
+        [HttpGet]
+        public IActionResult CreateCliente()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateCliente(Clientes cliente)
+        {
+            ModelState.Remove(nameof(Clientes.FechaRegistro));
+
+            if (!ModelState.IsValid)
+            {
+                return View(cliente);
+            }
+
+            if (!ValidarTelefono(cliente.Telefono))
+            {
+                ModelState.AddModelError("Telefono", "El teléfono debe tener 8 dígitos y comenzar por 2, 5, 7 u 8.");
+                return View(cliente);
+            }
+
+            if (!ValidarCedula(cliente.Cedula))
+            {
+                ModelState.AddModelError("Cedula", "La cédula debe tener el formato 000-000000-0000A.");
+                return View(cliente);
+            }
+
+            bool existe = await _context.Clientes.AnyAsync(c => c.Gmail == cliente.Gmail);
+            if (existe)
+            {
+                ModelState.AddModelError("Gmail", "El correo electrónico ya está en uso.");
+                return View(cliente);
+            }
+
+            cliente.Estado = true;
+            cliente.FechaRegistro = DateTime.Now;
+
+            _context.Clientes.Add(cliente);
+            await _context.SaveChangesAsync();
+
+            TempData["MensajeExito"] = "Cliente creado correctamente.";
+            return RedirectToAction(nameof(ListClientes));
+        }
+
+        private const string CarritoSessionKey = "Carrito";
+
+        private List<CarritoItemVM> ObtenerCarrito()
+        {
+            var json = HttpContext.Session.GetString(CarritoSessionKey);
+
+            if (string.IsNullOrEmpty(json))
+            {
+                return new List<CarritoItemVM>();
+            }
+
+            return JsonSerializer.Deserialize<List<CarritoItemVM>>(json) ?? new List<CarritoItemVM>();
+        }
+
+        private void GuardarCarrito(List<CarritoItemVM> carrito)
+        {
+            HttpContext.Session.SetString(CarritoSessionKey, JsonSerializer.Serialize(carrito));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Carrito()
+        {
+            var vm = new CarritoViewModel
+            {
+                Productos = await _context.Producto
+                    .Where(p => p.Estado && p.StockDisponible > 0)
+                    .ToListAsync(),
+
+                Items = ObtenerCarrito(),
+
+                Clientes = await _context.Clientes
+                    .Where(c => c.Estado)
+                    .ToListAsync(),
+
+                TiposPago = await _context.TiposPago
+                    .Where(t => t.Estado)
+                    .ToListAsync()
+            };
+
+            return View(vm);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AgregarAlCarrito(int productoId, int cantidad)
+        {
+            if (cantidad < 1)
+            {
+                cantidad = 1;
+            }
+
+            var producto = await _context.Producto.FindAsync(productoId);
+
+            if (producto == null || !producto.Estado)
+            {
+                TempData["MensajeError"] = "El producto no está disponible.";
+                return RedirectToAction(nameof(Carrito));
+            }
+
+            var carrito = ObtenerCarrito();
+            var item = carrito.FirstOrDefault(i => i.ProductoId == productoId);
+            var cantidadSolicitada = (item?.Cantidad ?? 0) + cantidad;
+
+            if (cantidadSolicitada > producto.StockDisponible)
+            {
+                TempData["MensajeError"] = $"Stock insuficiente para \"{producto.Nombre}\". Disponible: {producto.StockDisponible}.";
+                return RedirectToAction(nameof(Carrito));
+            }
+
+            if (item != null)
+            {
+                item.Cantidad = cantidadSolicitada;
+            }
+            else
+            {
+                carrito.Add(new CarritoItemVM
+                {
+                    ProductoId = producto.Id,
+                    Nombre = producto.Nombre,
+                    Imagen = producto.ImagenUrl,
+                    PrecioVenta = producto.PrecioVenta,
+                    Cantidad = cantidad
+                });
+            }
+
+            GuardarCarrito(carrito);
+            return RedirectToAction(nameof(Carrito));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult QuitarDelCarrito(int productoId)
+        {
+            var carrito = ObtenerCarrito();
+            carrito.RemoveAll(i => i.ProductoId == productoId);
+            GuardarCarrito(carrito);
+            return RedirectToAction(nameof(Carrito));
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> FinalizarVenta(int clienteId, int tipoPagoId, string? marcaTarjeta, string? ultimos4, string? cvv)
+        {
+            var carrito = ObtenerCarrito();
+
+            if (carrito.Count == 0)
+            {
+                TempData["MensajeError"] = "El carrito está vacío.";
+                return RedirectToAction(nameof(Carrito));
+            }
+
+            var empleadoIdClaim = User.FindFirst("Id")?.Value;
+            if (!int.TryParse(empleadoIdClaim, out int empleadoId))
+            {
+                TempData["MensajeError"] = "Debes iniciar sesión como empleado para registrar una venta.";
+                return RedirectToAction("LoginEmpleado", "LoginEmpleado");
+            }
+
+            var cliente = await _context.Clientes.FindAsync(clienteId);
+            if (cliente == null)
+            {
+                TempData["MensajeError"] = "Selecciona un cliente válido.";
+                return RedirectToAction(nameof(Carrito));
+            }
+
+            var tipoPago = await _context.TiposPago.FindAsync(tipoPagoId);
+            if (tipoPago == null)
+            {
+                TempData["MensajeError"] = "Selecciona un tipo de pago válido.";
+                return RedirectToAction(nameof(Carrito));
+            }
+
+            bool esTarjeta = tipoPago.Nombre.Contains("Tarjeta", StringComparison.OrdinalIgnoreCase);
+
+            if (esTarjeta && (string.IsNullOrWhiteSpace(marcaTarjeta) || string.IsNullOrWhiteSpace(ultimos4) || string.IsNullOrWhiteSpace(cvv)))
+            {
+                TempData["MensajeError"] = "Completa los datos de la tarjeta.";
+                return RedirectToAction(nameof(Carrito));
+            }
+
+            foreach (var item in carrito)
+            {
+                var producto = await _context.Producto.FindAsync(item.ProductoId);
+
+                if (producto == null || item.Cantidad > producto.StockDisponible)
+                {
+                    TempData["MensajeError"] = $"Stock insuficiente para \"{item.Nombre}\".";
+                    return RedirectToAction(nameof(Carrito));
+                }
+            }
+
+            decimal totalVenta = carrito.Sum(i => i.Subtotal);
+
+            var venta = new Venta_Prod
+            {
+                TotalVenta = totalVenta,
+                FechaCreacion = DateTime.Now
+            };
+
+            _context.Venta_Prod.Add(venta);
+            await _context.SaveChangesAsync();
+
+            foreach (var item in carrito)
+            {
+                var producto = await _context.Producto.FindAsync(item.ProductoId);
+
+                _context.Det_Venta.Add(new Det_Venta
+                {
+                    Venta_ProdId = venta.Id,
+                    Venta_Prod = null,
+                    ProductoId = item.ProductoId,
+                    Producto = null,
+                    Cantidad = item.Cantidad,
+                    TotalVenta = item.Subtotal
+                });
+
+                producto!.StockDisponible -= item.Cantidad;
+            }
+
+            var despacho = new Despacho
+            {
+                NumeroFactura = "FAC" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                ClientesId = clienteId,
+                Clientes = null,
+                EmpleadoId = empleadoId,
+                Empleado = null,
+                Venta_ProdId = venta.Id,
+                Venta_Prod = null,
+                TotalFactura = totalVenta,
+                FechaFactura = DateTime.Now,
+                TipoPagoId = tipoPagoId
+            };
+
+            _context.Despacho.Add(despacho);
+            await _context.SaveChangesAsync();
+
+            if (esTarjeta)
+            {
+                _context.PagosTarjeta.Add(new Pago_Tarjeta
+                {
+                    DespachoId = despacho.Id,
+                    MarcaTarjeta = marcaTarjeta!,
+                    Ultimos4 = ultimos4!,
+                    CVV = cvv!,
+                    Monto = totalVenta,
+                    FechaPago = DateTime.Now
+                });
+
+                await _context.SaveChangesAsync();
+            }
+
+            HttpContext.Session.Remove(CarritoSessionKey);
+
+            TempData["MensajeExito"] = $"Venta registrada correctamente. Factura: {despacho.NumeroFactura}";
+            return RedirectToAction(nameof(Index));
         }
 
         [HttpGet]

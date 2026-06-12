@@ -1,5 +1,331 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+@model Powertronic.Models.ViewModels.CarritoViewModel
+
 @{
+    ViewData["Title"] = "Realizar Venta";
+}
+
+<style>
+
+    .venta-container {
+        display: flex;
+        gap: 25px;
+        align-items: flex-start;
+    }
+
+    .productos-panel {
+        flex: 2;
+    }
+
+    .carrito-panel {
+        flex: 1;
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,.08);
+        position: sticky;
+        top: 20px;
+    }
+
+    .venta-container h2 {
+        color: var(--secondary-color);
+        font-weight: 700;
+    }
+
+    .productos-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+        gap: 18px;
+    }
+
+    .producto-card {
+        background: white;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        padding: 15px;
+        text-align: center;
+        box-shadow: 0 2px 5px rgba(0,0,0,.06);
+    }
+
+        .producto-card img {
+            width: 100%;
+            height: 120px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+
+        .producto-card h5 {
+            font-size: 0.95rem;
+            color: var(--secondary-color);
+            font-weight: 700;
+            min-height: 45px;
+        }
+
+        .producto-card .precio {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .producto-card .stock {
+            font-size: 0.85rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+    .agregar-form {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+    }
+
+        .agregar-form input[type="number"] {
+            width: 70px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 6px;
+            text-align: center;
+        }
+
+    .btn-agregar {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 6px 14px;
+        font-weight: 600;
+    }
+
+        .btn-agregar:hover {
+            background: var(--accent-color);
+            color: white;
+        }
+
+    .carrito-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 1px solid #eee;
+        padding: 10px 0;
+    }
+
+        .carrito-item .nombre {
+            font-weight: 600;
+            color: var(--secondary-color);
+        }
+
+        .carrito-item .detalle {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+    .btn-quitar {
+        background: #dc3545;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        padding: 5px 10px;
+        font-size: 0.8rem;
+    }
+
+        .btn-quitar:hover {
+            background: #b02a37;
+            color: white;
+        }
+
+    .carrito-total {
+        display: flex;
+        justify-content: space-between;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--secondary-color);
+        margin: 15px 0;
+    }
+
+    .checkout-form .form-group {
+        margin-bottom: 15px;
+    }
+
+    .checkout-form label {
+        font-weight: 600;
+        color: var(--secondary-color);
+    }
+
+    .checkout-form .form-control,
+    .checkout-form select {
+        height: 45px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background: #f8f9fa;
+    }
+
+    .btn-finalizar {
+        width: 100%;
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 14px;
+        font-weight: 700;
+        font-size: 1.05rem;
+    }
+
+        .btn-finalizar:hover {
+            background: var(--accent-color);
+            color: white;
+        }
+
+    .carrito-vacio {
+        color: #666;
+        text-align: center;
+        padding: 20px 0;
+    }
+
+</style>
+
+@if (TempData["MensajeExito"] != null)
+{
+    <div class="alert alert-success">@TempData["MensajeExito"]</div>
+}
+
+@if (TempData["MensajeError"] != null)
+{
+    <div class="alert alert-danger">@TempData["MensajeError"]</div>
+}
+
+<div class="venta-container">
+
+    <div class="productos-panel">
+
+        <h2>Catálogo</h2>
+        <hr />
+
+        <div class="productos-grid">
+
+            @foreach (var producto in Model.Productos)
+            {
+                <div class="producto-card">
+
+                    <img src="~/pictures/@producto.ImagenUrl" alt="@producto.Nombre" />
+
+                    <h5>@producto.Nombre</h5>
+
+                    <div class="precio">C$ @producto.PrecioVenta.ToString("N2")</div>
+                    <div class="stock">Stock: @producto.StockDisponible</div>
+
+                    <form asp-action="AgregarAlCarrito" method="post" class="agregar-form">
+                        <input type="hidden" name="productoId" value="@producto.Id" />
+                        <input type="number" name="cantidad" value="1" min="1" max="@producto.StockDisponible" />
+                        <button type="submit" class="btn-agregar">Agregar</button>
+                    </form>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+    <div class="carrito-panel">
+
+        <h2>Carrito</h2>
+        <hr />
+
+        @if (!Model.Items.Any())
+        {
+            <p class="carrito-vacio">El carrito está vacío.</p>
+        }
+        else
+        {
+            @foreach (var item in Model.Items)
+            {
+                <div class="carrito-item">
+
+                    <div>
+                        <div class="nombre">@item.Nombre</div>
+                        <div class="detalle">
+                            @item.Cantidad x C$ @item.PrecioVenta.ToString("N2")
+                            = C$ @item.Subtotal.ToString("N2")
+                        </div>
+                    </div>
+
+                    <form asp-action="QuitarDelCarrito" method="post">
+                        <input type="hidden" name="productoId" value="@item.ProductoId" />
+                        <button type="submit" class="btn-quitar">Quitar</button>
+                    </form>
+
+                </div>
+            }
+
+            <div class="carrito-total">
+                <span>Total</span>
+                <span>C$ @Model.Total.ToString("N2")</span>
+            </div>
+
+            <form asp-action="FinalizarVenta" method="post" class="checkout-form">
+
+                <div class="form-group">
+                    <label for="clienteId">Cliente</label>
+                    <select name="clienteId" id="clienteId" class="form-control" required>
+                        <option value="">Seleccione un cliente</option>
+                        @foreach (var cliente in Model.Clientes)
+                        {
+                            <option value="@cliente.Id">@cliente.NombreCliente @cliente.ApellidoCliente</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="tipoPagoId">Tipo de Pago</label>
+                    <select name="tipoPagoId" id="tipoPagoId" class="form-control" required onchange="toggleTarjeta()">
+                        <option value="">Seleccione un tipo de pago</option>
+                        @foreach (var tipo in Model.TiposPago)
+                        {
+                            <option value="@tipo.Id" data-tarjeta="@(tipo.Nombre.Contains("Tarjeta") ? "1" : "0")">@tipo.Nombre</option>
+                        }
+                    </select>
+                </div>
+
+                <div id="datosTarjeta" style="display:none;">
+
+                    <div class="form-group">
+                        <label for="marcaTarjeta">Marca de la Tarjeta</label>
+                        <input type="text" name="marcaTarjeta" id="marcaTarjeta" class="form-control" placeholder="Visa, Mastercard..." />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="ultimos4">Últimos 4 Dígitos</label>
+                        <input type="text" name="ultimos4" id="ultimos4" class="form-control" maxlength="4" placeholder="1234" />
+                    </div>
+
+                    <div class="form-group">
+                        <label for="cvv">CVV</label>
+                        <input type="password" name="cvv" id="cvv" class="form-control" maxlength="3" placeholder="123" />
+                    </div>
+
+                </div>
+
+                <button type="submit" class="btn-finalizar">Finalizar Venta</button>
+
+            </form>
+        }
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <script>
+        function toggleTarjeta() {
+            var select = document.getElementById('tipoPagoId');
+            var option = select.options[select.selectedIndex];
+            var esTarjeta = option && option.getAttribute('data-tarjeta') === '1';
+
+            var contenedor = document.getElementById('datosTarjeta');
+            contenedor.style.display = esTarjeta ? 'block' : 'none';
+
+            document.getElementById('marcaTarjeta').required = esTarjeta;
+            document.getElementById('ultimos4').required = esTarjeta;
+            document.getElementById('cvv').required = esTarjeta;
+        }
+    </script>
 }

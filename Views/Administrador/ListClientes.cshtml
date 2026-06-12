@@ -55,6 +55,20 @@
         color:white;
     }
 
+    .create-btn{
+        background:var(--secondary-color);
+        color:white;
+        text-decoration:none;
+        padding:10px 20px;
+        border-radius:8px;
+        white-space:nowrap;
+    }
+
+    .create-btn:hover{
+        background:var(--primary-color);
+        color:white;
+    }
+
     .client-grid{
         display:grid;
         grid-template-columns:repeat(auto-fill,minmax(420px,1fr));
@@ -141,9 +155,18 @@
             Limpiar
         </a>
 
+        <a asp-action="CreateCliente" class="create-btn">
+            + Crear Cliente
+        </a>
+
     </form>
 
 </div>
+
+@if (TempData["MensajeExito"] != null)
+{
+    <div class="alert alert-success">@TempData["MensajeExito"]</div>
+}
 
 <div class="client-grid">
 

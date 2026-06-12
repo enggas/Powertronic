@@ -1,8 +1,200 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+@{
+    ViewData["Title"] = "Inicio";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<style>
+
+    .hero {
+        background: linear-gradient(135deg, var(--secondary-color), #142a4d);
+        color: white;
+        border-radius: 20px;
+        padding: 70px 40px;
+        text-align: center;
+        margin-top: 30px;
+    }
+
+    .hero h1 {
+        font-size: 3rem;
+        font-weight: 800;
+        margin-bottom: 20px;
+    }
+
+    .hero h1 span {
+        color: var(--accent-color);
+    }
+
+    .hero p {
+        font-size: 1.15rem;
+        color: #cdd6e6;
+        max-width: 650px;
+        margin: 0 auto 35px;
+    }
+
+    .hero-actions {
+        display: flex;
+        justify-content: center;
+        gap: 20px;
+        flex-wrap: wrap;
+    }
+
+    .btn-hero {
+        padding: 14px 34px;
+        border-radius: 12px;
+        font-weight: 600;
+        font-size: 1rem;
+        text-decoration: none;
+        transition: .3s;
+        display: inline-block;
+    }
+
+    .btn-hero-primary {
+        background: var(--primary-color);
+        color: white;
+    }
+
+        .btn-hero-primary:hover {
+            background: var(--accent-color);
+            color: white;
+            transform: translateY(-3px);
+        }
+
+    .btn-hero-outline {
+        border: 2px solid var(--accent-color);
+        color: white;
+    }
+
+        .btn-hero-outline:hover {
+            background: var(--accent-color);
+            color: var(--secondary-color);
+            transform: translateY(-3px);
+        }
+
+    .access-section {
+        margin: 60px 0;
+    }
+
+    .access-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 30px;
+    }
+
+    .access-card {
+        background: white;
+        border-radius: 16px;
+        padding: 40px 30px;
+        text-align: center;
+        box-shadow: 0 2px 12px rgba(0,0,0,.08);
+        transition: .3s;
+    }
+
+        .access-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,.12);
+        }
+
+    .access-card h3 {
+        color: var(--secondary-color);
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .access-card p {
+        color: #666;
+        margin-bottom: 20px;
+        min-height: 70px;
+    }
+
+    .register-note {
+        text-align: center;
+        margin-top: 15px;
+        font-size: .95rem;
+    }
+
+        .register-note a {
+            color: var(--primary-color);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+            .register-note a:hover {
+                color: var(--accent-color);
+            }
+
+    @@media (max-width: 768px) {
+        .hero h1 {
+            font-size: 2.2rem;
+        }
+
+        .access-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+</style>
+
+<section class="hero">
+
+    <h1>Bienvenido a <span>Powertronic</span></h1>
+
+    <p>
+        Tu tienda de tecnología: computadoras, componentes, periféricos
+        y servicio técnico especializado, todo en un solo lugar.
+    </p>
+
+    <div class="hero-actions">
+
+        <a asp-controller="LoginCliente" asp-action="LoginCliente" class="btn-hero btn-hero-primary">
+            Acceso Clientes
+        </a>
+
+        <a asp-controller="LoginEmpleado" asp-action="LoginEmpleado" class="btn-hero btn-hero-outline">
+            Acceso Empleados
+        </a>
+
+    </div>
+
+</section>
+
+<section class="access-section">
+
+    <div class="access-grid">
+
+        <div class="access-card">
+
+            <h3>Soy Cliente</h3>
+
+            <p>
+                Inicia sesión para ver el catálogo, realizar compras
+                y dar seguimiento a tus pedidos.
+            </p>
+
+            <a asp-controller="LoginCliente" asp-action="LoginCliente" class="btn btn-primary">
+                Iniciar Sesión
+            </a>
+
+            <div class="register-note">
+                ¿No tienes cuenta?
+                <a asp-controller="Cuenta" asp-action="CrearCuenta">Regístrate aquí</a>
+            </div>
+
+        </div>
+
+        <div class="access-card">
+
+            <h3>Soy Empleado</h3>
+
+            <p>
+                Accede al panel interno para gestionar productos,
+                clientes, ventas y reparaciones.
+            </p>
+
+            <a asp-controller="LoginEmpleado" asp-action="LoginEmpleado" class="btn btn-primary">
+                Iniciar Sesión
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
