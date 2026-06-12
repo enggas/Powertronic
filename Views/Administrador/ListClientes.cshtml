@@ -1,5 +1,199 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<Powertronic.Models.Clientes>
+
 @{
+    ViewData["Title"] = "ListClientes";
 }
+
+<style>
+
+    .client-header{
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        margin-bottom:30px;
+    }
+
+    .client-header h2{
+        color:var(--secondary-color);
+        font-weight:700;
+        margin:0;
+    }
+
+    .search-form{
+        display:flex;
+        gap:10px;
+    }
+
+    .search-box{
+        width:280px;
+        padding:10px;
+        border:1px solid #ddd;
+        border-radius:8px;
+    }
+
+    .search-btn{
+        background:var(--primary-color);
+        color:white;
+        border:none;
+        padding:10px 20px;
+        border-radius:8px;
+    }
+
+    .search-btn:hover{
+        background:var(--accent-color);
+    }
+
+    .reset-btn{
+        background:#6c757d;
+        color:white;
+        text-decoration:none;
+        padding:10px 20px;
+        border-radius:8px;
+    }
+
+    .reset-btn:hover{
+        color:white;
+    }
+
+    .client-grid{
+        display:grid;
+        grid-template-columns:repeat(auto-fill,minmax(420px,1fr));
+        gap:25px;
+    }
+
+    .client-card{
+        background:white;
+        border:1px solid #ddd;
+        border-radius:12px;
+        padding:25px;
+        display:flex;
+        align-items:center;
+        transition:.3s;
+        box-shadow:0 2px 5px rgba(0,0,0,.08);
+    }
+
+    .client-card:hover{
+        transform:translateY(-3px);
+        box-shadow:0 5px 15px rgba(0,0,0,.15);
+    }
+
+    .client-image{
+        margin-right:25px;
+    }
+
+    .client-image img{
+        width:100px;
+        height:100px;
+        border-radius:50%;
+        object-fit:cover;
+        border:3px solid var(--primary-color);
+    }
+
+    .client-info h4{
+        margin:0;
+        color:var(--secondary-color);
+        font-weight:700;
+    }
+
+    .client-info p{
+        margin:4px 0;
+        color:#666;
+    }
+
+    .client-status{
+        margin-top:10px;
+        display:inline-block;
+        padding:5px 12px;
+        border-radius:20px;
+        color:white;
+        font-size:13px;
+        font-weight:600;
+    }
+
+    .activo{
+        background:#28a745;
+    }
+
+    .inactivo{
+        background:#dc3545;
+    }
+
+</style>
+
+<div class="client-header">
+
+    <h2>Directorio de Clientes</h2>
+
+    <form asp-action="ListClientes" method="get" class="search-form">
+
+        <input type="text"
+               name="buscar"
+               value="@Context.Request.Query["buscar"]"
+               placeholder="Buscar cliente..."
+               class="search-box" />
+
+        <button type="submit" class="search-btn">
+            Buscar
+        </button>
+
+        <a asp-action="ListClientes"
+           class="reset-btn">
+            Limpiar
+        </a>
+
+    </form>
+
+</div>
+
+<div class="client-grid">
+
+    @foreach (var cliente in Model)
+    {
+        <div class="client-card">
+
+            <div class="client-image">
+
+                <img src="~/pictures/UserDefault.png"
+                     alt="Cliente">
+
+            </div>
+
+            <div class="client-info">
+
+                <h4>
+                    @cliente.NombreCliente
+                    @cliente.ApellidoCliente
+                </h4>
+
+                <p>
+                    <strong>Correo:</strong>
+                    @cliente.Gmail
+                </p>
+
+                <p>
+                    <strong>Teléfono:</strong>
+                    @cliente.Telefono
+                </p>
+
+                <p>
+                    <strong>Cédula:</strong>
+                    @cliente.Cedula
+                </p>
+
+                <p>
+                    <strong>Dirección:</strong>
+                    @cliente.Direccion
+                </p>
+
+                <span class="client-status @(cliente.Estado ? "activo" : "inactivo")">
+
+                    @(cliente.Estado ? "Activo" : "Inactivo")
+
+                </span>
+
+            </div>
+
+        </div>
+    }
+
+</div>

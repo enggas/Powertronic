@@ -203,6 +203,146 @@ namespace Powertronic.Controllers
             return View(resultado);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> ListClientes(string buscar)
+        {
+            var clientes = _context.Clientes.AsQueryable();
+
+            if (!string.IsNullOrEmpty(buscar))
+            {
+                clientes = clientes.Where(c =>
+                    c.NombreCliente.Contains(buscar) ||
+                    c.ApellidoCliente.Contains(buscar) ||
+                    c.Gmail.Contains(buscar) ||
+                    c.Cedula.Contains(buscar));
+            }
+
+            return View(await clientes.ToListAsync());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> HistorialVentas(string buscar)
+        {
+            var despachos = _context.Despacho
+                .Include(d => d.Clientes)
+                .Include(d => d.Venta_Prod)
+                    .ThenInclude(v => v!.det_Ventas)
+                        .ThenInclude(dv => dv.Producto)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(buscar))
+            {
+                despachos = despachos.Where(d =>
+                d.Clientes != null &&
+                (d.Clientes.NombreCliente.Contains(buscar) ||
+                d.Clientes.ApellidoCliente.Contains(buscar)));
+            }
+
+            var pagosTarjeta = await _context.PagosTarjeta.ToListAsync();
+
+            var modelo = await despachos
+                .Select(d => new HistorialVentasVM
+                {
+                    Venta = d.Venta_Prod!,
+
+                    ClienteNombre =
+                    (d.Clientes != null ? d.Clientes.NombreCliente : "Desconocido") + " " +
+                    (d.Clientes != null ? d.Clientes.ApellidoCliente : "Desconocido"),
+
+                    NumeroFactura = d.NumeroFactura,
+
+                    TipoPagoId = d.TipoPagoId
+                })
+                .ToListAsync();
+
+            foreach (var item in modelo)
+            {
+                var despacho = await _context.Despacho
+                    .FirstOrDefaultAsync(d =>
+                        d.NumeroFactura == item.NumeroFactura);
+
+                if (despacho != null)
+                {
+                    var pagoTarjeta = pagosTarjeta
+                        .FirstOrDefault(p =>
+                            p.DespachoId == despacho.Id);
+
+                    if (pagoTarjeta != null)
+                    {
+                        item.MarcaTarjeta = pagoTarjeta.MarcaTarjeta;
+                        item.Ultimos4 = pagoTarjeta.Ultimos4;
+                        item.MontoTarjeta = pagoTarjeta.Monto;
+                        item.FechaPagoTarjeta = pagoTarjeta.FechaPago;
+                    }
+
+                    item.TipoPagoNombre =
+                        item.TipoPagoId == 1 ? "Efectivo" :
+                        item.TipoPagoId == 2 ? "Tarjeta de Crédito" :
+                        item.TipoPagoId == 3 ? "Tarjeta de Débito" :
+                        "Desconocido";
+                }
+            }
+
+            return View(modelo);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ListOrdenReparacion(string buscar)
+        {
+            var ordenes = _context.Orden_Reparacion
+                .Include(o => o.Despacho)
+                    .ThenInclude(d => d!.Clientes)
+                .Include(o => o.Empleado)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(buscar))
+            {
+
+                ordenes = ordenes.Where(o =>
+                    o.Despacho != null && // Verificación de null para evitar desreferencias
+                    o.Empleado != null && // Verificación de null para evitar desreferencias
+                    (o.Despacho.NumeroFactura.Contains(buscar) ||
+                    o.Empleado.Nombre.Contains(buscar) ||
+                    o.Empleado.Apellido.Contains(buscar) ||
+                    (o.Despacho.Clientes != null &&
+                    (o.Despacho.Clientes.NombreCliente.Contains(buscar) ||
+                    o.Despacho.Clientes.ApellidoCliente.Contains(buscar)))));
+
+            }
+
+            var detalles = await _context.DetalleReparacion
+                .ToListAsync();
+
+
+            var modelo = await ordenes
+                .Select(o => new OrdenReparacionViewModel
+                {
+                    Orden = o,
+
+                    ClienteNombre=
+                        (o.Despacho != null && o.Despacho.Clientes != null) ?
+                        o.Despacho.Clientes.NombreCliente + " " + o.Despacho.Clientes.ApellidoCliente :
+                        "Desconocido",
+
+                    EmpleadoNombre=
+                        o.Empleado != null ?
+                         o.Empleado.Nombre + " " + o.Empleado.Apellido :
+                         "Desconocido",
+
+                    NumeroFactura= o.Despacho != null ? o.Despacho.NumeroFactura : "Desconocido"
+
+                })
+                .ToListAsync();
+
+            foreach (var item in modelo)
+            {
+                item.Detalles = detalles
+                    .Where(d => d.OrdenRepId == item.Orden.Id)
+                    .ToList();
+            }
+
+            return View(modelo);
+        }
 
     }
 }

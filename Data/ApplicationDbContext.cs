@@ -22,6 +22,7 @@ namespace Powertronic.Data
         public DbSet<Detalle_Adquisicion> Detalle_Adquisicion { get; set; }
         public DbSet<Empleado> Empleado { get; set; }
         public DbSet<Orden_Reparacion> Orden_Reparacion { get; set; }
+        public DbSet<DetalleReparacion> DetalleReparacion { get; set; }
         public DbSet<Producto> Producto { get; set; }
         public DbSet<Proveedores> Proveedores { get; set; }
         public DbSet<Venta_Prod> Venta_Prod { get; set; }

@@ -1,5 +1,234 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<Powertronic.Models.ViewModels.OrdenReparacionViewModel>
+
 @{
+    ViewData["Title"] = "ListOrdenReparación";
+}
+
+<style>
+
+    .catalog-search {
+        margin-bottom: 25px;
+    }
+
+        .catalog-search form {
+            display: flex;
+            gap: 10px;
+        }
+
+    .search-box {
+        flex: 1;
+        padding: 12px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+    }
+
+    .search-btn {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+    }
+
+        .search-btn:hover {
+            background: var(--accent-color);
+        }
+
+    .repair-card {
+        background: white;
+        margin-bottom: 25px;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(0,0,0,.08);
+    }
+
+    .repair-header {
+        background: var(--secondary-color);
+        color: white;
+        padding: 15px 25px;
+        font-size: 24px;
+        font-weight: bold;
+    }
+
+    .repair-body {
+        padding: 20px;
+    }
+
+    .repair-details {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+    }
+
+    .left-column,
+    .right-column {
+        width: 48%;
+    }
+
+        .left-column p,
+        .right-column p {
+            margin-bottom: 10px;
+        }
+
+    .status-badge {
+        padding: 6px 12px;
+        border-radius: 20px;
+        color: white;
+        font-weight: bold;
+    }
+
+    .estado-entregado {
+        background: #28a745;
+    }
+
+    .estado-pendiente {
+        background: #dc3545;
+    }
+
+    .detalles-section {
+        margin-top: 20px;
+        border-top: 1px solid #ddd;
+        padding-top: 20px;
+    }
+
+        .detalles-section h5 {
+            color: var(--secondary-color);
+            margin-bottom: 15px;
+        }
+
+    .detalle-item {
+        background: #f8f9fa;
+        border-left: 5px solid var(--primary-color);
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+    }
+
+        .detalle-item h6 {
+            margin-bottom: 10px;
+            color: var(--secondary-color);
+            font-weight: bold;
+        }
+
+</style>
+
+<div class="catalog-search">
+
+    <form asp-action="ListOrdenReparacion" method="get">
+
+        <input type="text"
+               name="buscar"
+               class="search-box"
+               placeholder="Buscar por cliente, empleado o factura..." />
+
+        <button type="submit"
+                class="search-btn">
+            Buscar
+        </button>
+
+    </form>
+
+</div>
+
+@foreach (var item in Model)
+{
+    <div class="repair-card">
+
+        <div class="repair-header">
+            Orden de Reparación #@item.Orden.Id
+        </div>
+
+        <div class="repair-body">
+
+            <div class="repair-details">
+
+                <div class="left-column">
+
+                    <p>
+                        <strong>Factura:</strong>
+                        @item.NumeroFactura
+                    </p>
+
+                    <p>
+                        <strong>Cliente:</strong>
+                        @item.ClienteNombre
+                    </p>
+
+                    <p>
+                        <strong>Técnico:</strong>
+                        @item.EmpleadoNombre
+                    </p>
+
+                </div>
+
+                <div class="right-column">
+
+                    <p>
+                        <strong>Fecha Orden:</strong>
+                        @item.Orden.FechaOrden.ToString("dd/MM/yyyy")
+                    </p>
+
+                    <p>
+                        <strong>Fecha Entrega:</strong>
+                        @item.Orden.FechaEntrega.ToString("dd/MM/yyyy")
+                    </p>
+
+                    <p>
+                        <strong>Costo:</strong>
+                        C$ @item.Orden.CostoReparacion.ToString("N2")
+                    </p>
+
+                    <p>
+
+                        <strong>Estado:</strong>
+
+                        <span class="status-badge @(item.Orden.EstadoEntrega ? "estado-entregado" : "estado-pendiente")">
+
+                            @(item.Orden.EstadoEntrega
+                                                    ? "Entregado"
+                                                    : "Pendiente")
+
+                    </span>
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="detalles-section">
+
+                <h5>Trabajos Realizados</h5>
+
+            @foreach (var detalle in item.Detalles)
+                {
+                    <div class="detalle-item">
+
+                        <h6>
+                            @detalle.ProductoReparado
+                        </h6>
+
+                        <p>
+                            @detalle.DescripcionReparacion
+                        </p>
+
+                    </div>
+                }
+
+            </div>
+
+            <div class="detalles-section">
+
+                <h5>Observaciones Generales</h5>
+
+                <p>
+                    @item.Orden.DetallesReparacion
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
 }
