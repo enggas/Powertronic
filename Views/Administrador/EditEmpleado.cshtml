@@ -1,5 +1,272 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model Powertronic.Models.Empleado
+
 @{
+    ViewData["Title"] = "Editar Empleado";
+}
+
+<style>
+
+    .edit-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 85vh;
+        padding: 30px;
+    }
+
+    .edit-card {
+        width: 1200px;
+        min-height: 750px;
+        background: white;
+        display: flex;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,.15);
+    }
+
+    /* FORMULARIO */
+
+    .form-section {
+        flex: 1;
+        padding: 50px;
+        overflow-y: auto;
+    }
+
+        .form-section h2 {
+            text-align: center;
+            margin-bottom: 35px;
+            color: var(--secondary-color);
+            font-size: 2.5rem;
+            font-weight: bold;
+        }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-label {
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: var(--secondary-color);
+    }
+
+    .form-control,
+    .form-select {
+        height: 50px;
+        border: none;
+        background: #f3f4f6;
+        border-radius: 10px;
+    }
+
+        .form-control:focus,
+        .form-select:focus {
+            border: 2px solid var(--accent-color);
+            box-shadow: none;
+        }
+
+    .btn-save {
+        width: 100%;
+        height: 55px;
+        border: none;
+        border-radius: 10px;
+        background: var(--primary-color);
+        color: white;
+        font-size: 18px;
+        font-weight: 600;
+        margin-top: 20px;
+        transition: .3s;
+    }
+
+        .btn-save:hover {
+            background: var(--accent-color);
+            transform: scale(1.02);
+        }
+
+    /* PANEL DERECHO */
+
+    .info-section {
+        flex: 1;
+        background: linear-gradient( 135deg, var(--primary-color), var(--accent-color) );
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        padding: 40px;
+    }
+
+    .info-content {
+        text-align: center;
+    }
+
+        .info-content h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+        }
+
+        .info-content p {
+            font-size: 1.1rem;
+            line-height: 1.8;
+        }
+
+    .employee-icon {
+        font-size: 100px;
+        margin-bottom: 25px;
+    }
+
+    .text-danger {
+        font-size: .9rem;
+    }
+
+</style>
+
+<div class="edit-wrapper">
+
+    <div class="edit-card">
+
+        <div class="form-section">
+
+            <h2>Editar Empleado</h2>
+
+            <form asp-action="EditEmpleado" method="post">
+
+                <input type="hidden" asp-for="Id" />
+
+                <div class="form-group">
+                    <label asp-for="Codigo"></label>
+                    <input asp-for="Codigo" class="form-control" />
+                    <span asp-validation-for="Codigo" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Cedula"></label>
+                    <input asp-for="Cedula" class="form-control" />
+                    <span asp-validation-for="Cedula" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Nombre"></label>
+                    <input asp-for="Nombre" class="form-control" />
+                    <span asp-validation-for="Nombre" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Apellido"></label>
+                    <input asp-for="Apellido" class="form-control" />
+                    <span asp-validation-for="Apellido" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Telefono"></label>
+                    <input asp-for="Telefono" class="form-control" />
+                    <span asp-validation-for="Telefono" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Gmail"></label>
+                    <input asp-for="Gmail" class="form-control" />
+                    <span asp-validation-for="Gmail" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="Direccion"></label>
+                    <input asp-for="Direccion" class="form-control" />
+                    <span asp-validation-for="Direccion" class="text-danger"></span>
+                </div>
+
+                <!-- CONTRASEÑA -->
+
+                <div class="form-group">
+                    <label asp-for="Contraseña"></label>
+
+                    <input asp-for="Contraseña"
+                           type="password"
+                           class="form-control"
+                           placeholder="Ingrese nueva contraseña" />
+
+                    <span asp-validation-for="Contraseña"
+                          class="text-danger"></span>
+                </div>
+
+                <!-- CARGO -->
+
+                <div class="form-group">
+
+                    <label asp-for="CargoId">
+                        Cargo
+                    </label>
+
+                    <select asp-for="CargoId"
+                            class="form-select">
+
+                        @foreach (var cargo in ViewBag.Cargos)
+                        {
+                            <option value="@cargo.Id"
+                            selected="@(cargo.Id==Model.CargoId)">
+                                @cargo.Descripcion
+                            </option>
+                        }
+
+                    </select>
+
+                </div>
+
+                <!-- ESTADO -->
+
+                <div class="form-group">
+
+                    <label asp-for="Estado">
+                        Estado
+                    </label>
+
+                    <select asp-for="Estado"
+                            class="form-select">
+
+                        <option value="true">
+                            Activo
+                        </option>
+
+                        <option value="false">
+                            Inactivo
+                        </option>
+
+                    </select>
+
+                </div>
+
+                <!-- FECHA -->
+
+                <input type="hidden"
+                       asp-for="FechaRegistro" />
+
+                <button type="submit"
+                        class="btn-save">
+                    Guardar Cambios
+                </button>
+
+            </form>
+
+        </div>
+
+        <div class="info-section">
+
+            <div class="info-content">
+
+                <h1>Powertronic</h1>
+
+                <p>
+                    Actualiza la información del empleado,
+                    modifica su cargo, estado y credenciales
+                    de acceso al sistema.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }

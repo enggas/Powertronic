@@ -344,5 +344,127 @@ namespace Powertronic.Controllers
             return View(modelo);
         }
 
+
+        [HttpGet]
+        public async Task<IActionResult> ListEmpleado(string buscar)
+        {
+            var empleados = _context.Empleado
+                .Include(e => e.Cargo)
+                .AsQueryable();
+
+            if (!string.IsNullOrEmpty(buscar))
+            {
+                empleados = empleados.Where(e =>
+                    e.Nombre.Contains(buscar) ||
+                    e.Apellido.Contains(buscar) ||
+                    e.Gmail.Contains(buscar) ||
+                    e.Cargo.NombreCargo.Contains(buscar));
+            }
+
+            return View(await empleados.ToListAsync());
+        }
+
+        [HttpGet]
+        public IActionResult EditEmpleado(int id)
+        {
+            var empleado = _context.Empleado
+                .Include(e => e.Cargo)
+                .FirstOrDefault(e => e.Id == id);
+
+            if (empleado == null)
+            {
+                TempData["MensajeError"] = "Empleado no encontrado.";
+                return RedirectToAction(nameof(ListEmpleado));
+            }
+
+            ViewBag.Cargos = _context.Cargo.ToList();
+
+            return View(empleado);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult EditEmpleado(Empleado empleado)
+        {
+
+            var errores = ModelState
+            .Where(x => x.Value.Errors.Count > 0)
+            .Select(x => new
+            {
+                Campo = x.Key,
+                Error = x.Value.Errors.First().ErrorMessage
+            })
+            .ToList();
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Cargos = _context.Cargo.ToList();
+                return View(empleado);
+            }
+
+            var empleadoExistente = _context.Empleado
+                .FirstOrDefault(e => e.Id == empleado.Id);
+            
+            if (empleadoExistente == null)
+            {
+                TempData["MensajeError"] =
+                    $"No se encontró el empleado con ID {empleado.Id}";
+
+                return View(empleado);
+            }
+
+            if (empleadoExistente == null)
+            {
+                TempData["MensajeError"] =
+                    "No se encontró el empleado a actualizar.";
+
+                ViewBag.Cargos = _context.Cargo.ToList();
+
+                return View(empleado);
+            }
+
+            empleadoExistente.Codigo = empleado.Codigo;
+            empleadoExistente.Cedula = empleado.Cedula;
+            empleadoExistente.Nombre = empleado.Nombre;
+            empleadoExistente.Apellido = empleado.Apellido;
+            empleadoExistente.Telefono = empleado.Telefono;
+            empleadoExistente.Gmail = empleado.Gmail;
+            empleadoExistente.Direccion = empleado.Direccion;
+
+            empleadoExistente.CargoId = empleado.CargoId;
+
+            empleadoExistente.Estado = empleado.Estado;
+
+            // Permitir cambio de contraseña
+            if (!string.IsNullOrWhiteSpace(empleado.Contraseña))
+            {
+                empleadoExistente.Contraseña =
+                    empleado.Contraseña;
+            }
+
+            if (!ModelState.IsValid)
+            {
+                var error = ModelState.Values
+                    .SelectMany(v => v.Errors)
+                    .Select(e => e.ErrorMessage)
+                    .ToList();
+
+                ViewBag.Errores = error;
+
+                ViewBag.Cargos = _context.Cargo.ToList();
+
+                return View(empleado);
+            }
+
+            Console.WriteLine("Llegué al SaveChanges");
+
+            _context.SaveChanges();
+
+            TempData["MensajeExito"] =
+                "Empleado actualizado correctamente.";
+
+            return RedirectToAction(nameof(ListEmpleado));
+        }
+
     }
 }

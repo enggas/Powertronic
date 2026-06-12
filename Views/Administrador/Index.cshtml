@@ -41,11 +41,19 @@
         background:#f4f7fc;
     }
 
-    .card-dashboard{
-        background:white;
-        border-radius:15px;
-        padding:20px;
-        box-shadow:0 2px 8px rgba(0,0,0,.1);
+    .card-dashboard {
+        background: white;
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 2px 8px rgba(0,0,0,.1);
+        /* Animación */
+        transition: all 0.3s ease;
+        cursor: pointer;
+    }
+
+    .card-dashboard:hover {
+        transform: scale(1.03);
+        box-shadow: 0 10px 25px rgba(0,0,0,.15);
     }
 
     .stats-grid{
@@ -68,24 +76,32 @@
         border-bottom:none;
     }
 
-    .quick-sale{
-        background:#3006c6;
-        color:white;
-        text-align:center;
-        text-decoration:none;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        font-size:24px;
-        font-weight:bold;
-        min-height:200px;
-        border-radius:15px;
+    .quick-sale {
+        background: #3006c6;
+        color: white;
+        text-align: center;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 24px;
+        font-weight: bold;
+        min-height: 200px;
+        border-radius: 15px;
+        transition: all 0.3s ease;
     }
 
-    .quick-sale:hover{
-        background:#00a6ff;
-        color:white;
-    }
+        .quick-sale:hover {
+            background: #00a6ff;
+            color: white;
+            transform: scale(1.03);
+            box-shadow: 0 10px 25px rgba(0,0,0,.20);
+        }
+
+        .card-dashboard:hover,
+        .quick-sale:hover {
+            transform: translateY(-8px) scale(1.02);
+        }
 
 </style>
 
@@ -127,8 +143,8 @@
 
             <!-- Empleados -->
 
-            <a asp-controller="Empleado"
-               asp-action="Index"
+            <a asp-controller="Administrador"
+               asp-action="ListEmpleado"
                style="text-decoration:none;color:inherit;">
 
                 <div class="card-dashboard employee-card">
