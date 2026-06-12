@@ -6,6 +6,8 @@
 
 <style>
 
+
+
     .catalog-search {
         margin-bottom: 25px;
     }
@@ -32,6 +34,24 @@
 
         .search-btn:hover {
             background: var(--accent-color);
+        }
+
+    .register-btn {
+        background: #198754;
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+        text-decoration: none;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 500;
+    }
+
+        .register-btn:hover {
+            background: #157347;
+            color: white;
         }
 
     .employee-card {
@@ -121,6 +141,12 @@
             Buscar
         </button>
 
+        <a asp-controller="Administrador"
+           asp-action="CreateEmpleado"
+           class="register-btn">
+            + Registrar Empleado
+        </a>
+
     </form>
 
 </div>
@@ -195,12 +221,6 @@
                     Editar
                 </a>
 
-                <a asp-action="DeactivateEmpleado"
-                   asp-controller="Administrador"
-                   asp-route-id="@empleado.Id"
-                   class="btn-admin">
-                    Eliminar
-                </a>
             </div>
 
         </div>
