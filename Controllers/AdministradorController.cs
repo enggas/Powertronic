@@ -364,6 +364,53 @@ namespace Powertronic.Controllers
             return View(await empleados.ToListAsync());
         }
 
+        [HttpGet]
+        public IActionResult CreateEmpleado()
+        {
+            ViewBag.Cargos = _context.Cargo
+                .Where(c => c.Estado)
+                .ToList();
+
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> CreateEmpleado(Empleado empleado)
+        {
+            // Asignar fecha actual automáticamente
+            empleado.FechaRegistro = DateTime.Now;
+
+            // Cargar el objeto Cargo completo
+            Cargo? cargo = await _context.Cargo
+                .FirstOrDefaultAsync(c => c.Id == empleado.CargoId);
+
+            if (empleado.Cargo == null)
+            {
+                ModelState.AddModelError("CargoId", "Debe seleccionar un cargo válido.");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                ViewBag.Cargos = _context.Cargo
+                    .Where(c => c.Estado)
+                    .ToList();
+
+                return View(empleado);
+            }
+
+            _context.Empleado.Add(empleado);
+
+            await _context.SaveChangesAsync();
+
+            TempData["MensajeExito"] =
+                "Empleado registrado correctamente.";
+
+            return RedirectToAction(nameof(ListEmpleado));
+        }
+
+
+
 
         [HttpGet]
         public IActionResult EditEmpleado(int id)

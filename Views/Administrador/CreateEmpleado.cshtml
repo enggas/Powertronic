@@ -1,5 +1,247 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model Powertronic.Models.Empleado
+
 @{
+    ViewData["Title"] = "Registrar Empleado";
+}
+
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
+
+<style>
+
+    body {
+        background: #f4f7fc;
+    }
+
+    .register-container {
+        min-height: 90vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 30px;
+    }
+
+    .register-card {
+        width: 100%;
+        max-width: 1100px;
+        background: white;
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: 0 10px 30px rgba(0,0,0,.15);
+        display: flex;
+    }
+
+    .left-panel {
+        width: 45%;
+        background: linear-gradient(135deg,#0A192F,#3006c6);
+        color: white;
+        padding: 40px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+    }
+
+        .left-panel h1 {
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .left-panel p {
+            font-size: 18px;
+            opacity: .9;
+        }
+
+    .employee-icon {
+        font-size: 100px;
+        margin-bottom: 20px;
+    }
+
+    .right-panel {
+        width: 55%;
+        padding: 40px;
+    }
+
+        .right-panel h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #0A192F;
+            font-weight: bold;
+        }
+
+    .form-control,
+    .form-select {
+        border-radius: 10px;
+        padding: 12px;
+    }
+
+    .btn-save {
+        background: #3006c6;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        padding: 12px;
+        font-weight: bold;
+        width: 100%;
+        transition: .3s;
+    }
+
+        .btn-save:hover {
+            background: #00a6ff;
+            transform: scale(1.02);
+        }
+
+    .btn-cancel {
+        width: 100%;
+        margin-top: 10px;
+        border-radius: 10px;
+    }
+
+</style>
+
+<div class="register-container">
+
+    <div class="register-card">
+
+        <div class="left-panel">
+
+            <div class="employee-icon">
+                👨‍💼
+            </div>
+
+            <h1>
+                Nuevo Empleado
+            </h1>
+
+            <p>
+                Registra un nuevo empleado dentro
+                del sistema Powertronic y asigna
+                el cargo correspondiente.
+            </p>
+
+        </div>
+
+        <div class="right-panel">
+
+            <h2>Registro de Empleado</h2>
+
+            <form asp-action="CreateEmpleado" method="post">
+
+                <div asp-validation-summary="ModelOnly"
+                     class="text-danger mb-3">
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Codigo" class="form-label"></label>
+                    <input asp-for="Codigo" class="form-control" />
+                    <span asp-validation-for="Codigo" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Cedula" class="form-label"></label>
+                    <input asp-for="Cedula" class="form-control" />
+                    <span asp-validation-for="Cedula" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Nombre" class="form-label"></label>
+                    <input asp-for="Nombre" class="form-control" />
+                    <span asp-validation-for="Nombre" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Apellido" class="form-label"></label>
+                    <input asp-for="Apellido" class="form-control" />
+                    <span asp-validation-for="Apellido" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Telefono" class="form-label"></label>
+                    <input asp-for="Telefono" class="form-control" />
+                    <span asp-validation-for="Telefono" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Direccion" class="form-label"></label>
+                    <input asp-for="Direccion" class="form-control" />
+                    <span asp-validation-for="Direccion" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Gmail" class="form-label"></label>
+                    <input asp-for="Gmail" class="form-control" />
+                    <span asp-validation-for="Gmail" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Contraseña" class="form-label"></label>
+                    <input asp-for="Contraseña"
+                           type="password"
+                           class="form-control" />
+                    <span asp-validation-for="Contraseña" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Cargo
+                    </label>
+
+                    <select asp-for="CargoId" class="form-select">
+
+                        @foreach (var cargo in ViewBag.Cargos)
+                        {
+                            <option value="@cargo.Id">
+                                @cargo.NombreCargo
+                            </option>
+                        }
+
+                    </select>
+
+                </div>
+
+                <div class="mb-3">
+
+                    <label class="form-label">
+                        Estado
+                    </label>
+
+                    <select asp-for="Estado" class="form-select">
+                        <option value="true">Activo</option>
+                        <option value="false">Inactivo</option>
+                    </select>
+
+                </div>
+
+                <button type="submit" class="btn-save">
+                    Registrar Empleado
+                </button>
+
+                @if (ViewBag.Errores != null)
+                {
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach (var error in ViewBag.Errores)
+                            {
+                                <li>@error</li>
+                            }
+                        </ul>
+                    </div>
+                }
+
+                <a asp-action="ListEmpleado"
+                   asp-controller="Administrador"
+                   class="btn btn-secondary btn-cancel">
+                    Cancelar
+                </a>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
 }
