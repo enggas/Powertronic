@@ -88,30 +88,32 @@
         background: #fafafa;
     }
 
- 
-    
-     .product-card
-    {
-        flex-direction: column;
+    @@media(max - width:768px) {
+
+        .product-card {
+            flex-direction: column;
+        }
+
+        .product-image {
+            width: 100%;
+            border-right: none;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .product-details {
+            flex-direction: column;
+        }
+
+        .left-column,
+        .right-column {
+            width: 100%;
+        }
     }
 
-    .product-image {
-        width: 100%;
-        border-right: none;
-        border-bottom: 1px solid #ddd;
-    }
-
-    .product-details {
-        flex-direction: column;
-    }
-
-    .left-column,
-    .right-column {
-        width: 100%;
-    }
- 
 
 </style>
+
+
 
 <div class="catalog-search">
 

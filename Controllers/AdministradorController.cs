@@ -95,139 +95,114 @@ namespace Powertronic.Controllers
             return View(await productos.ToListAsync());
         }
 
-        // GET: Empleadoes/Details/5
-        public async Task<IActionResult> Details(int? id)
+      
+        [HttpGet]
+        public async Task<IActionResult> ListAdquisiciones(string buscar)
         {
-            if (id == null)
+            var adquisiciones = await _context.Adquisicion
+                .Include(a => a.Empleado)
+                .Include(a => a.Proveedor)
+                .ToListAsync();
+
+            if (!string.IsNullOrWhiteSpace(buscar))
             {
-                return NotFound();
+                adquisiciones = adquisiciones
+                    .Where(a => a.NumeroDocumento.Contains(buscar))
+                    .ToList();
             }
 
-            var empleado = await _context.Empleado
-                .Include(e => e.Cargo)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (empleado == null)
+            var resultado = new List<AdquisicionViewModel>();
+
+            foreach (var adquisicion in adquisiciones)
             {
-                return NotFound();
-            }
+                var detalles = await _context.Detalle_Adquisicion
+                    .Include(d => d.Producto)
+                    .Where(d => d.AdquisicionId == adquisicion.Id)
+                    .ToListAsync();
 
-            return View(empleado);
-        }
-
-        // GET: Empleadoes/Create
-        public IActionResult Create()
-        {
-            ViewData["CargoId"] = new SelectList(_context.Cargo, "Id", "Descripcion");
-            return View();
-        }
-
-        // POST: Empleadoes/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Codigo,Cedula,Nombre,Apellido,CargoId,Telefono,Gmail,Direccion,Estado,FechaRegistro")] Empleado empleado)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(empleado);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["CargoId"] = new SelectList(_context.Cargo, "Id", "Descripcion", empleado.CargoId);
-            return View(empleado);
-        }
-
-        // GET: Empleadoes/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var empleado = await _context.Empleado.FindAsync(id);
-            if (empleado == null)
-            {
-                return NotFound();
-            }
-            ViewData["CargoId"] = new SelectList(_context.Cargo, "Id", "Descripcion", empleado.CargoId);
-            return View(empleado);
-        }
-
-        // POST: Empleadoes/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Codigo,Cedula,Nombre,Apellido,CargoId,Telefono,Gmail,Direccion,Estado,FechaRegistro")] Empleado empleado)
-        {
-            if (id != empleado.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
+                resultado.Add(new AdquisicionViewModel
                 {
-                    _context.Update(empleado);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
+                    Adquisicion = adquisicion,
+                    Detalles = detalles
+                });
+            }
+
+            return View(resultado);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ListAdquisiciones(string buscar, bool filtro = true)
+        {
+            var adquisiciones = await _context.Adquisicion
+                .Include(a => a.Empleado)
+                .Include(a => a.Proveedor)
+                .Where(a => a.NumeroDocumento.Contains(buscar))
+                .ToListAsync();
+
+            return View(adquisiciones);
+        }
+
+
+        [HttpGet]
+        public async Task<IActionResult> ListProveedores(string buscar)
+        {
+            var proveedores = await _context.Proveedores
+                .ToListAsync();
+
+            if (!string.IsNullOrWhiteSpace(buscar))
+            {
+                proveedores = proveedores
+                    .Where(p =>
+                        p.Nombre.Contains(buscar) ||
+                        p.Codigo.Contains(buscar))
+                    .ToList();
+            }
+
+            var resultado = new List<ProveedorViewModel>();
+
+            foreach (var proveedor in proveedores)
+            {
+                var productos = await _context.Producto
+                    .Where(p => p.ProveedoresId == proveedor.Id)
+                    .ToListAsync();
+
+                resultado.Add(new ProveedorViewModel
                 {
-                    if (!EmpleadoExists(empleado.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+                    proveedores = proveedor,
+                    productos = productos
+                });
             }
-            ViewData["CargoId"] = new SelectList(_context.Cargo, "Id", "Descripcion", empleado.CargoId);
-            return View(empleado);
+
+            return View(resultado);
         }
 
-        // GET: Empleadoes/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        [HttpPost]
+        public async Task<IActionResult> ListProveedores(string buscar, bool filtro = true)
         {
-            if (id == null)
+            var proveedores = await _context.Proveedores
+                .Where(p =>
+                    p.Nombre.Contains(buscar) ||
+                    p.Codigo.Contains(buscar))
+                .ToListAsync();
+
+            var resultado = new List<ProveedorViewModel>();
+
+            foreach (var proveedor in proveedores)
             {
-                return NotFound();
+                var productos = await _context.Producto
+                    .Where(p => p.ProveedoresId == proveedor.Id)
+                    .ToListAsync();
+
+                resultado.Add(new ProveedorViewModel
+                {
+                    proveedores = proveedor,
+                    productos = productos
+                });
             }
 
-            var empleado = await _context.Empleado
-                .Include(e => e.Cargo)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (empleado == null)
-            {
-                return NotFound();
-            }
-
-            return View(empleado);
+            return View(resultado);
         }
 
-        // POST: Empleadoes/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var empleado = await _context.Empleado.FindAsync(id);
-            if (empleado != null)
-            {
-                _context.Empleado.Remove(empleado);
-            }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
-
-        private bool EmpleadoExists(int id)
-        {
-            return _context.Empleado.Any(e => e.Id == id);
-        }
     }
 }

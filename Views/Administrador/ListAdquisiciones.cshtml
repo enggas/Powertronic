@@ -1,5 +1,271 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model IEnumerable<Powertronic.Models.ViewModels.AdquisicionViewModel>
+
 @{
+    ViewData["Title"] = "Adquisiciones";
 }
+
+<style>
+
+    .catalog-search {
+        margin-bottom: 25px;
+    }
+
+        .catalog-search form {
+            display: flex;
+            gap: 10px;
+        }
+
+    .search-box {
+        flex: 1;
+        padding: 12px;
+        border-radius: 8px;
+        border: 1px solid #ddd;
+    }
+
+    .search-btn {
+        background: var(--primary-color);
+        color: white;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 8px;
+    }
+
+        .search-btn:hover {
+            background: var(--accent-color);
+        }
+
+    .product-card {
+        display: flex;
+        background: white;
+        margin-bottom: 20px;
+        border: 1px solid #dcdcdc;
+        box-shadow: 0 2px 5px rgba(0,0,0,.08);
+    }
+
+    .product-image {
+        width: 220px;
+        border-right: 1px solid #ddd;
+    }
+
+        .product-image img {
+            width: 100%;
+            height: 220px;
+            object-fit: contain;
+            padding: 10px;
+        }
+
+    .product-info {
+        flex: 1;
+    }
+
+    .product-header {
+        background: var(--secondary-color);
+        color: white;
+        font-size: 28px;
+        font-weight: bold;
+        padding: 10px 20px;
+    }
+
+    .product-details {
+        display: flex;
+        justify-content: space-between;
+        padding: 20px;
+    }
+
+    .left-column,
+    .right-column {
+        width: 45%;
+    }
+
+        .left-column p,
+        .right-column p {
+            margin-bottom: 10px;
+        }
+
+    .product-description {
+        border-top: 1px solid #ddd;
+        padding: 15px 20px;
+        background: #fafafa;
+    }
+
+    @@media(max - width:768px) {
+
+        .product-card {
+            flex-direction: column;
+        }
+
+        .product-image {
+            width: 100%;
+            border-right: none;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .product-details {
+            flex-direction: column;
+        }
+
+        .left-column,
+        .right-column {
+            width: 100%;
+        }
+    }
+
+    .producto-miniatura {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100px;
+        text-align: center;
+    }
+
+        .producto-miniatura span {
+            margin-top: 5px;
+            font-size: .8rem;
+            color: #555;
+        }
+
+    .imagenes-adquisicion {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        padding: 15px;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .miniatura-producto {
+        width: 90px;
+        height: 90px;
+        object-fit: contain;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        background: white;
+        padding: 5px;
+        transition: .3s;
+    }
+
+        .miniatura-producto:hover {
+            transform: scale(1.1);
+        }
+
+</style>
+
+
+
+
+<div class="catalog-search">
+
+    <form asp-action="ListAdquisiciones"
+          asp-controller="Administrador"
+          method="get">
+
+        <input type="text"
+               name="buscar"
+               class="search-box"
+               placeholder="Buscar por documento..." />
+
+        <button type="submit"
+                class="search-btn">
+            Buscar
+        </button>
+
+    </form>
+
+</div>
+
+@foreach (var item in Model)
+{
+    var primerProducto = item.Detalles.FirstOrDefault();
+
+    <div class="product-card">
+
+        <div class="imagenes-adquisicion">
+
+            @foreach (var detalle in item.Detalles)
+            {
+                @if (detalle.Producto != null)
+                {
+                    <img src="@detalle.Producto.ImagenUrl"
+                         alt="@detalle.Producto.Nombre"
+                         class="miniatura-producto" />
+                }
+                <span>
+                    @detalle.Producto?.Nombre
+                </span>
+                <small>
+                    Cantidad: @detalle.Stock
+                </small>
+            }
+
+        </div>
+
+        <div class="product-info">
+
+            <div class="product-header">
+                Documento # @item.Adquisicion.NumeroDocumento
+            </div>
+
+            <div class="product-details">
+
+                <div class="left-column">
+
+                    <p>
+                        <strong>Proveedor:</strong>
+                        @item.Adquisicion.Proveedor?.Nombre
+                    </p>
+
+                    <p>
+                        <strong>Empleado:</strong>
+                        @item.Adquisicion.Empleado?.Nombre
+                        @item.Adquisicion.Empleado?.Apellido
+                    </p>
+
+                    <p>
+                        <strong>Fecha:</strong>
+                        @item.Adquisicion.FechaAdquisicion.ToShortDateString()
+                    </p>
+
+                </div>
+
+                <div class="right-column">
+
+                    <p>
+                        <strong>Total:</strong>
+                        C$ @item.Adquisicion.Total
+                    </p>
+
+                    <p>
+                        <strong>Productos:</strong>
+                        @item.Detalles.Count
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div class="product-description">
+
+                <strong>Productos adquiridos:</strong>
+
+                <ul>
+
+                    @foreach (var detalle in item.Detalles)
+                    {
+                        <li>
+                            @detalle.Producto?.Nombre
+                            |
+                            Cantidad:
+                            @detalle.Stock
+                            |
+                            C$ @detalle.Total
+                        </li>
+                    }
+
+                </ul>
+
+            </div>
+
+        </div>
+
+    </div>
+}
+

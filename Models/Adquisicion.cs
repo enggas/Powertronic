@@ -36,7 +36,7 @@ namespace Powertronic.Models
 
 
 
-
+        public ICollection<Detalle_Adquisicion> Detalles { get; set; }= new List<Detalle_Adquisicion>();
 
     }
 }
